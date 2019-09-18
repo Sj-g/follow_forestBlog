@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.it.mapper.RecordMapper">
+    <insert id="addOperation" parameterType="com.it.entity.Record">
+        insert into record (record_resource_id,record_admin_id,record_updatetime,record_ip)
+        values (#{recordResourceId},#{recordAdminId},#{recordUpdateTime},#{recordIp})
+    </insert>
+    <select id="findRecord" resultType="com.it.entity.Record">
+        select * from record;
+    </select>
+    <select id="findRecordById" resultType="com.it.entity.Record" parameterType="int">
+        select * from record where record_admin_id=#{id}
+    </select>
+</mapper>

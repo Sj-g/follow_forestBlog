@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.mapper.ArticleMapper">
+    <resultMap id="BaseResultMap" type="com.it.entity.Article">
+        <id column="article_id" property="articleId" jdbcType="INTEGER"/>
+        <result column="article_user_id" property="articleUserId" jdbcType="INTEGER"/>
+        <result column="article_title" property="articleTitle" jdbcType="VARCHAR"/>
+        <result column="article_content" property="articleContent" jdbcType="LONGVARCHAR"/>
+        <result column="article_summary" property="articleSummary" jdbcType="VARCHAR"/>
+        <result column="article_view_count" property="articleViewCount" jdbcType="INTEGER"/>
+        <result column="article_comment_count" property="articleCommentCount" jdbcType="INTEGER"/>
+        <result column="article_like_count" property="articleLikeCount" jdbcType="INTEGER"/>
+        <result column="article_is_comment" property="articleIsComment" jdbcType="INTEGER"/>
+        <result column="article_order" property="articleOrder" jdbcType="INTEGER"/>
+        <result column="article_create_time" property="articleCreateTime" jdbcType="TIMESTAMP"/>
+        <result column="article_update_time" property="articleUpdateTime" jdbcType="TIMESTAMP"/>
+        <result column="article_status" property="articleStatus" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_list">
+        article_id, article_user_id, article_title, article_content,article_summary, article_view_count, article_comment_count, article_like_count, article_create_time,
+    article_update_time, article_is_comment, article_status, article_order
+    </sql>
+    <!--    添加文章-->
+    <insert id="insertArticle" parameterType="com.it.entity.Article" useGeneratedKeys="true" keyProperty="articleId">
+    insert into article
+    (article_user_id, article_title,
+    article_view_count, article_comment_count,
+    article_like_count, article_create_time, article_update_time,
+    article_is_comment, article_status, article_order,
+    article_content, article_summary)
+    values (#{articleUserId,jdbcType=INTEGER}, #{articleTitle,jdbcType=VARCHAR},
+    #{articleViewCount,jdbcType=INTEGER},
+    #{articleCommentCount,jdbcType=INTEGER},
+    #{articleLikeCount,jdbcType=INTEGER}, #{articleCreateTime,jdbcType=TIMESTAMP},
+    #{articleUpdateTime,jdbcType=TIMESTAMP},
+    #{articleIsComment,jdbcType=INTEGER}, #{articleStatus,jdbcType=INTEGER}, #{articleOrder,jdbcType=INTEGER},
+    #{articleContent,jdbcType=LONGVARCHAR}, #{articleSummary,jdbcType=VARCHAR})
+    </insert>
+    <!--    通过Id删除文章-->
+    <delete id="deleteArticleById" parameterType="int">
+        update article set article_status=0
+        where article_id=#{articleId}
+    </delete>
+    <!--    有选择的更新文章信息-->
+    <update id="updateArticle" parameterType="com.it.entity.Article">
+        update article
+        <set>
+            <if test="articleUserId !=null">article_user_id=#{articleUserId},</if>
+            <if test="articleTitle !=null">article_title=#{articleTitle},</if>
+            <if test="articleContent !=null">article_content=#{articleContent},</if>
+            <if test="articleViewCount !=null">article_view_count=#{articleViewCount},</if>
+            <if test="articleCommentCount !=null">article_comment_count=#{articleCommentCount},</if>
+            <if test="articleLikeCount !=null">article_like_count=#{articleLikeCount},</if>
+            <if test="articleIsComment !=null">article_is_comment=#{arcticleIsComment},</if>
+            <if test="articleStatus !=null">article_status=#{articleStatus},</if>
+            <if test="articleOrder !=null">article_order=#{articleOrder},</if>
+            <if test="articleUpdateTime !=null">article_update_time=#{articleUpdateTime},</if>
+            <if test="articleSummary !=null">article_summary=#{articleSummary}</if>
+        </set>
+        where article_id=#{articleId};
+    </update>
+    <!--    查询文章-->
+    <select id="findAll" parameterType="map" resultMap="BaseResultMap">
+        select article.*
+        from
+        article
+        <where>
+            <if test="status !=null">
+                article.article_status=#{status} and
+            </if>
+            <if test="keywords !=null">
+                article.article_title LIKE concat(concat('%',#{keyword}),'%') and
+            </if>
+            <if test="userId !=null">
+                article.article_user_id=#{userId} and
+            </if>
+            <if test="categoryId !=null">
+                article.article_id in (
+                SELECT
+                article_category_ref.article_id
+                from article_category_ref
+                where article_category_ref.category_id =#{categoryId}
+                ) AND
+            </if>
+            <if test="tagId !=null">
+                article.article_id in (
+                select article_tag_ref.article_id from article_tag_ref
+                where article_category_ref.category_id =#{categoryId}
+                ) <!--and-->
+            </if>
+            -- 1=1
+        </where>
+        order by article.article_order desc ,article.articel_id desc;
+    </select>
+    <!--    查询展示并按Id降序-->
+    <select id="listAllNotWithContent" resultMap="BaseResultMap">
+        select
+        article_id, article_user_id, article_title, article_create_time
+        from article
+        where article_status=1
+        order by article_id desc;
+    </select>
+    <!--    文章总数-->
+    <select id="countArticle" parameterType="int" resultType="int">
+        select count (*) from article;
+    </select>
+    <!--    获得评论的总和-->
+    <select id="countArticleComment" resultType="int">
+        select sum(article_comment_count) from article where article_status=1;
+    </select>
+    <!--    获得浏览总数-->
+    <select id="countArticleView" resultType="int">
+        select sum(article_view_count) from article;
+    </select>
+    <!--    获得文章的总数(按一定顺序)-->
+    <select id="listArticle" resultMap="BaseResultMap">
+        select * from article where article_status=1 order by article_status asc,article_order desc,article_id asc
+    </select>
+    <!--    根据Id查询文章-->
+    <select id="getArticleByStatusAndId" resultMap="BaseResultMap">
+        select * from article where article_id=#{id} and article_status=#{status};
+    </select>
+    <!--    获得评论最多的文章-->
+    <select id="listArticleByViewCount" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_list"/>
+        from article where article_status=1
+        order by article_comment_count desc,article_order,article_id desc limit #{limit}
+    </select>
+    <!--    获取上一篇-->
+    <select id="getAfterArticle" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_list"/>
+        from article
+        where article_id &lt; #{id} and article_status=1
+        limit 1
+    </select>
+    <!--    获取下一篇-->
+    <select id="getPreArticle" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_list"/>
+        from article
+        where article_id > #{id} and article_status=1
+        limit 1
+    </select>
+    <!--    随机文章-->
+    <select id="listRandomArticle" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_list"/>
+        from article
+        where article_status=1
+        order by RAND()
+        limit #{limit}
+    </select>
+    <!--    获得热评文章-->
+    <select id="listArticleByCommentCount">
+        select
+        <include refid="Base_Column_list"/>
+        from article
+        where article_status=1
+        order by article_comment_count desc,article_order DESC, article_id DESC
+        limit #{limit}
+    </select>
+    <update id="updateCommentCount" parameterType="int">
+        update
+        <include refid="Base_Column_list"/>
+        set article_comment_count=(
+        select * from comment where article_id=comment_id
+        )
+        where article_id=#{articleId}
+    </update>
+    <!--    获得最后更新的文章-->
+    <select id="getLastUpdateArticle" resultMap="BaseResultMap">
+        select * from article
+        where article_status=1 and article_update_time=(
+        select max(article_update_time) from article;
+        )
+    </select>
+    <select id="countArticleByUser" resultType="int">
+        select count(*) from article where article_id=#{id} and article_status=1
+    </select>
+    <select id="findArticleByCategoryId" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_list"/>
+        FROM article, article_category_ref
+        WHERE
+        article.article_status = 1 AND
+        article.article_id = article_category_ref.article_id AND
+        article_category_ref.category_id = #{catgeoyrId}
+        LIMIT #{limit}
+    </select>
+    <select id="findArticleByCategoryIds" resultType="com.it.entity.Article">
+        SELECT
+        article.article_id, article.article_user_id, article.article_title,
+        article.article_view_count, article.article_comment_count,
+        article.article_like_count, article.article_create_time, article.article_update_time,
+        article.article_is_comment, article.article_status, article.article_order,
+        article.article_summary
+        FROM article, article_category_ref
+        <where>
+            article.article_status = 1 AND
+            article.article_id = article_category_ref.article_id AND
+            article_category_ref.category_id
+            <if test="categoryIds != null">
+                IN
+                <foreach collection="categoryIds" open="(" close=")" separator="," item="id">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+        LIMIT #{limit}
+    </select>
+    <!--获得最新文章-->
+    <select id="listArticleByLimit" resultType="com.it.entity.Article">
+        SELECT
+        article_id, article_user_id, article_title, article_view_count, article_comment_count, article_like_count,
+        article_create_time,
+        article_update_time, article_is_comment, article_status, article_order
+        FROM
+        article
+        ORDER BY article_id DESC
+        LIMIT #{value}
+    </select>
+<!--    批量删除-->
+    <delete id="deleteBatch" parameterType="list">
+        delete from article
+        <if test="ids !=null">
+            where article_id IN
+            <foreach collection="ids" index="(" close=")" item="itm" separator=",">
+                #{itm}
+            </foreach>
+        </if>
+    </delete>
+</mapper>
