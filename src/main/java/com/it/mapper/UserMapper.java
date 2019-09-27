@@ -1,6 +1,7 @@
 package com.it.mapper;
 
 import com.it.entity.User;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -53,5 +54,11 @@ public interface UserMapper {
      * @return 用户
      */
     User getUserByEmail(String email) ;
+    /**
+     * 设置status
+     * status 状态码
+     * @return
+     */
+    Integer setStatus(@Param(value = "Status") Integer Status,@Param(value = "userId") Integer userId);
 
 }

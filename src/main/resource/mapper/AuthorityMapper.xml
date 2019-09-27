@@ -4,4 +4,12 @@
     <select id="getAuthority" parameterType="int" resultType="com.it.entity.Authority">
         select * from authority where authority_admin_id=#{authorityAdminId}
     </select>
+    <delete id="deleteAuthority" parameterType="int">
+        delete from authority where authority_resource_id=#{resourceId} and authority_admin_id=#{adminId}
+    </delete>
+    <insert id="addAuthority" parameterType="com.it.entity.Authority">
+        insert into authority  (authority_admin_id,authority_resource_id,authority_addtime,authority_ip)
+        values(#{authorityAdminId},
+        #{authorityResourceId},#{authorityAddTime},#{authorityIp})
+    </insert>
 </mapper>

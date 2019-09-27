@@ -1,6 +1,6 @@
 package com.it.controller;
 
-import com.it.base.baseTest;
+import com.it.base.BaseTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @WebAppConfiguration
-public class AdminAuthorityControllerTest extends baseTest {
+public class AdminAuthorityControllerTest extends BaseTest {
     private MockMvc mockMvc;
     @Autowired
     private WebApplicationContext webApplicationContext;

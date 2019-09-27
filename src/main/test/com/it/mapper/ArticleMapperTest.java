@@ -1,8 +1,7 @@
 package com.it.mapper;
 
-import com.it.base.baseTest;
+import com.it.base.BaseTest;
 import com.it.entity.Article;
-import com.it.entity.Category;
 import com.it.enums.ArticleStatus;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 
-public class ArticleMapperTest extends baseTest {
+public class ArticleMapperTest extends BaseTest {
     @Autowired
     private ArticleMapper articleMapper;
 

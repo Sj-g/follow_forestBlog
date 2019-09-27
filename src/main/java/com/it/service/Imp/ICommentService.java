@@ -32,4 +32,18 @@ public class ICommentService implements CommentService {
         }
         return commentList;
     }
+
+    @Override
+    public List<Comment> getCommentByArticleId(Integer articleId) {
+        List<Comment> commentList=null;
+        try {
+            commentList=commentMapper.listCommentByArticleId(articleId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("文章获取失败，case{},articleId{}",e,articleId);
+        }
+        return commentList;
+    }
+
+
 }

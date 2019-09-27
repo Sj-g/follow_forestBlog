@@ -3,6 +3,7 @@ package com.it.service.Imp;
 import com.it.entity.Admin;
 import com.it.entity.Record;
 import com.it.entity.Resource;
+import com.it.enums.ResourceStatus;
 import com.it.mapper.RecordMapper;
 import com.it.mapper.ResourceMapper;
 import com.it.service.ResourceService;
@@ -24,35 +25,19 @@ public class IResourceService implements ResourceService {
     private RecordMapper recordMapper;
 
     @Override
-    public int disable(Integer id, HttpServletRequest request) {
-
-        Admin admin = (Admin) request.getSession().getAttribute("admin");
+    public int disable(Integer id) {
         Resource resource = resourceMapper.findResourceById(id);
-        resource.setResourceStatus(0);
-        Record record = new Record();
-        record.setRecordResourceId(id);
-        //admin.getAdminId()
-        record.setRecordAdminId(1);
-        String ip = MyUtils.getIpAddr(request);
-        record.setRecordIp(ip);
-        record.setRecordUpdateTime(new Date());
-        recordMapper.addOperation(record);
+        //设置禁用
+        resource.setResourceStatus(ResourceStatus.UNABLE.getCode());
         int result=resourceMapper.disableAndEnable(resource);
         return result;
     }
 
     @Override
-    public int enable(Integer id, HttpServletRequest request) {
-        Admin admin = (Admin) request.getSession().getAttribute("admin");
+    public int enable(Integer id) {
         Resource resource = resourceMapper.findResourceById(id);
-        resource.setResourceStatus(1);
-        Record record = new Record();
-        record.setRecordResourceId(id);
-        record.setRecordAdminId(admin.getAdminId());
-        String ip = MyUtils.getIpAddr(request);
-        record.setRecordIp(ip);
-        record.setRecordUpdateTime(new Date());
-        recordMapper.addOperation(record);
+        //设置可用
+        resource.setResourceStatus(ResourceStatus.ENABLE.getCode());
         return resourceMapper.disableAndEnable(resource);
     }
 

@@ -1,10 +1,10 @@
 package com.it.mapper;
 
-import com.it.base.baseTest;
+import com.it.base.BaseTest;
 import org.junit.Test;
 
 
-public class ArticleCategoryRefMapperTest extends baseTest {
+public class ArticleCategoryRefMapperTest extends BaseTest {
 
     @Test
     public void insert() {

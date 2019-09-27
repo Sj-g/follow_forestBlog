@@ -40,9 +40,10 @@ public interface AdminMapper {
 
     /**
      * 获得管理员列表
-     * @return  管理员列表
+     *
+     * @return 管理员列表
      */
-    List<Admin> listAdmin() ;
+    List<Admin> listAdmin();
 
 
     /**
@@ -51,6 +52,6 @@ public interface AdminMapper {
      * @param email 邮箱
      * @return 管理员
      */
-    Admin getAdminByEmail(String email) ;
+    Admin getAdminByEmail(String email);
 
 }

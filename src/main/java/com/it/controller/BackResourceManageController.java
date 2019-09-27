@@ -14,43 +14,54 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 资源的管理
+ * 启用
+ * 禁用
+ * 获得资源列表
+ */
 @Controller
 public class BackResourceManageController {
     @Autowired
     private ResourceService resourceService;
+
     /**
      * 禁用资源
-     * @param id
-     * @return
+     *
+     * @param id 资源Id
+     * @return 操作结果
      */
-    @RequestMapping(value = "/disable/{id}",method = RequestMethod.PUT)
-    public ResponseVo disable(@PathVariable Integer id,HttpServletRequest request){
-        int judgeSuccess=resourceService.disable(id,request);
-        if (judgeSuccess!=1){
+    @RequestMapping(value = "/disable/{id}", method = RequestMethod.PUT)
+    public ResponseVo disable(@PathVariable Integer id, HttpServletRequest request) {
+        int judgeSuccess = resourceService.disable(id);
+        if (judgeSuccess != 1) {
             return ResponseVo.fail();
         }
         return ResponseVo.success();
     }
+
     /**
      * 启用资源
-     * @param id
-     * @return
+     *
+     * @param id 资源Id
+     * @return 返回结果
      */
-    @RequestMapping(value = "/enable/{id}",method = RequestMethod.PUT)
-    public ResponseVo enable(@PathVariable Integer id, HttpServletRequest request){
-        int judgeSuccess=resourceService.enable(id,request);
-        if (judgeSuccess!=1){
+    @RequestMapping(value = "/enable/{id}", method = RequestMethod.PUT)
+    public ResponseVo enable(@PathVariable Integer id, HttpServletRequest request) {
+        int judgeSuccess = resourceService.enable(id);
+        if (judgeSuccess <= 0) {
             return ResponseVo.fail();
         }
         return ResponseVo.success();
     }
+
     /**
      * 获得资源列表
      */
     @RequestMapping("/resourceList")
-    public ModelAndView resourceList(ModelAndView modelAndView){
-        Map<String, List<Resource>> stringListMap=resourceService.geListResource();
-        modelAndView.addObject("stringListMap",stringListMap);
+    public ModelAndView resourceList(ModelAndView modelAndView) {
+        Map<String, List<Resource>> stringListMap = resourceService.geListResource();
+        modelAndView.addObject("stringListMap", stringListMap);
         modelAndView.setViewName("");
         return modelAndView;
     }

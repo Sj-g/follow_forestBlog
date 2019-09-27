@@ -10,7 +10,6 @@
     <packaging>war</packaging>
 
     <name>follow_forestBlog Maven Webapp</name>
-    <!-- FIXME change it to the project's website -->
     <url>http://www.example.com</url>
 
     <properties>
@@ -152,7 +151,7 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.6.6</version>
         </dependency>
-        <!-- apache共公包 -->
+<!--         apache共公包-->
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
@@ -238,7 +237,12 @@
             <artifactId>hutool-all</artifactId>
             <version>4.1.13</version>
         </dependency>
-
+        <!--JSR303数据校验-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.4.1.Final</version>
+        </dependency>
     </dependencies>
 
     <build>

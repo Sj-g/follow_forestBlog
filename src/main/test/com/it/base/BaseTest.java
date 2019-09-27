@@ -10,6 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 @ContextConfiguration( locations= {"classpath:spring/spring-mvc.xml","classpath:spring/spring-mybatis.xml"})
 @Transactional
 //@TransactionConfiguration(transactionManager = "transactionManager",defaultRollback = true)
-public class baseTest {
+public class BaseTest {
 
 }

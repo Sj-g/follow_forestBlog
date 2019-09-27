@@ -15,7 +15,7 @@
     <sql id="tb">user</sql>
 
     <sql id="Base_Column_List">
-    user_id, user_pass, user_nickname, user_email, user_last_login_ip, user_register_time, user_last_login_time, user_status
+    user_id, user_pass, user_nickname, user_email, user_last_login_ip, user_register_time, user_last_login_time, user_status,user_img
   </sql>
 
     <select id="getUserById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
@@ -36,10 +36,10 @@
         <include refid="tb"/>
         (user_id, user_pass,
         user_nickname, user_email, user_last_login_ip, user_register_time,
-        user_last_login_time, user_status)
+        user_last_login_time, user_status,user_img)
         values (#{userId,jdbcType=INTEGER}, #{userPass,jdbcType=VARCHAR},
         #{userNickname,jdbcType=VARCHAR}, #{userEmail,jdbcType=VARCHAR}, #{userLastLoginIp,jdbcType=VARCHAR}, #{userRegisterTime,jdbcType=TIMESTAMP},
-        #{userLastLoginTime,jdbcType=TIMESTAMP}, #{userStatus,jdbcType=INTEGER})
+        #{userLastLoginTime,jdbcType=TIMESTAMP}, #{userStatus,jdbcType=INTEGER},#{userImg,jdbcType=VARCHAR})
     </insert>
 
     <update id="update" parameterType="com.it.entity.User">
@@ -52,7 +52,8 @@
             <if test="userLastLoginIp != null">user_last_login_ip = #{userLastLoginIp,jdbcType=VARCHAR},</if>
             <if test="userRegisterTime != null">user_register_time = #{userRegisterTime,jdbcType=TIMESTAMP},</if>
             <if test="userLastLoginTime != null">user_last_login_time = #{userLastLoginTime,jdbcType=TIMESTAMP},</if>
-            <if test="userStatus != null">user_status = #{userStatus,jdbcType=INTEGER},</if>
+            <if test="userStatus != null">user_status = #{userStatus,jdbcType=INTEGER},
+            </if><if test="userImg != null">user_img = #{userImg,jdbcType=INTEGER},</if>
         </set>
         where user_id = #{userId,jdbcType=INTEGER}
     </update>
@@ -64,7 +65,7 @@
         <include refid="Base_Column_List"/>
         FROM
         <include refid="tb"/>
-        ORDER BY `user_status` ASC
+        where user_status=1
     </select>
 
     <!--根据Email查用户-->
@@ -78,7 +79,14 @@
         </where>
         limit 1
     </select>
-
+    <update id="setStatus">
+        update
+        <include refid="tb"/>
+        <set>
+            <if test="Status != null">user_status = #{Status,jdbcType=INTEGER},</if>
+        </set>
+        where user_id = #{userId,jdbcType=INTEGER}
+    </update>
 
 
 </mapper>

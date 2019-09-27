@@ -6,26 +6,11 @@ import java.util.List;
 
 public interface CategoryService {
     /**
-     * 获得分类总数
-     *
-     * @return
-     */
-    Integer countCategory();
-
-
-    /**
      * 获得分类列表
      *
      * @return 分类列表
      */
     List<Category> listCategory();
-
-    /**
-     * 获得分类列表
-     *
-     * @return 分类列表
-     */
-    List<Category> listCategoryWithCount();
 
     /**
      * 删除分类
@@ -47,9 +32,8 @@ public interface CategoryService {
      * 添加分类
      *
      * @param category 分类
-     * @return 分类
      */
-    Category insertCategory(Category category);
+    void insertCategory(Category category);
 
     /**
      * 更新分类

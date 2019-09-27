@@ -1,15 +1,13 @@
 package com.it.mapper;
 
-import com.it.base.baseTest;
+import com.it.base.BaseTest;
 import com.it.entity.Category;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
-
-public class CategoryMapperTest extends baseTest {
+public class CategoryMapperTest extends BaseTest {
     @Autowired
     private CategoryMapper categoryMapper;
 

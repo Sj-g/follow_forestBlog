@@ -5,17 +5,17 @@ import com.it.entity.Resource;
 import com.it.mapper.AuthorityMapper;
 import com.it.mapper.ResourceMapper;
 import com.it.service.AuthorityService;
-import com.it.service.ResourceService;
-import org.checkerframework.checker.units.qual.K;
+import com.it.utils.MyUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
+import java.util.*;
 
 @Service
+@Slf4j
 public class IAuthorityService implements AuthorityService {
     @Autowired
     private AuthorityMapper authorityMapper;
@@ -25,17 +25,18 @@ public class IAuthorityService implements AuthorityService {
 
     @Override
     public List<Authority> getAuthority(Integer adminId) {
-        List<Authority> authorityList = authorityMapper.getAuthority(adminId);
-        return authorityList;
+
+        return authorityMapper.getAuthority(adminId);
     }
 
     /**
      * 获得用户获得权限和未获得的权限
-     * @param adminId
+     *
+     * @param adminId 管理员id
      * @return
      */
     @Override
-    public List<Map<String,List<Resource>>> getEnAuthority(Integer adminId) {
+    public List<Map<String, List<Resource>>> getEnAuthority(Integer adminId) {
         Map<String, List<Resource>> getMap = new HashMap<>();
         Map<String, List<Resource>> noGetMap = new HashMap<>();
         //获得二级菜单的权限
@@ -62,8 +63,8 @@ public class IAuthorityService implements AuthorityService {
             List<Resource> resourceList1 = getMap.get(list.get(i).getResourceName());
             if (resourceList.size() != resourceList1.size()) {
                 for (int j = 0; j < resourceList.size(); j++) {
-                    for(int k=0;k<resourceList1.size();k++){
-                        if(resourceList1.get(k).getResourceId()==resourceList.get(j).getResourceId()){
+                    for (int k = 0; k < resourceList1.size(); k++) {
+                        if (resourceList1.get(k).getResourceId() == resourceList.get(j).getResourceId()) {
                             resourceList.remove(j);
                             break;
                         }
@@ -71,13 +72,43 @@ public class IAuthorityService implements AuthorityService {
 
                 }
             }
-            noGetMap.put(list.get(i).getResourceName(),resourceList);
+            noGetMap.put(list.get(i).getResourceName(), resourceList);
         }
-        List<Map<String,List<Resource>>>mapList=new ArrayList<>();
+        List<Map<String, List<Resource>>> mapList = new ArrayList<>();
         //获得的权限
         mapList.add(getMap);
         //未获得权限
         mapList.add(noGetMap);
         return mapList;
+    }
+
+    @Override
+    public Integer unAble(Integer resourceId, Integer adminId) {
+        Integer integer = null;
+        try {
+            integer = authorityMapper.deleteAuthority(resourceId, adminId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("禁止权限失败,case:{},resourceId{},adminId{}", e, resourceId, adminId);
+        }
+        return integer;
+    }
+
+    @Override
+    public Integer enAble(Integer resourceId, Integer adminId, HttpServletRequest request) {
+        Authority authority = new Authority();
+        authority.setAuthorityAdminId(adminId);
+        authority.setAuthorityResourceId(resourceId);
+        authority.setAuthorityAddTime(new Date());
+        authority.setAuthorityIp(MyUtils.getIpAddr(request));
+        System.out.println(authority);
+        Integer integer = null;
+        try {
+            integer = authorityMapper.addAuthority(authority);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("添加管理员权限错误,resourceId{},adminId{},case:{}", resourceId, adminId, e);
+        }
+        return integer;
     }
 }

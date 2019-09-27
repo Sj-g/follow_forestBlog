@@ -1,6 +1,6 @@
 package com.it.mapper;
 
-import com.it.base.baseTest;
+import com.it.base.BaseTest;
 import com.it.entity.Resource;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +8,7 @@ import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
-
-public class ResourceMapperTest extends baseTest {
+public class ResourceMapperTest extends BaseTest {
     @Autowired
     private ResourceMapper resourceMapper;
     @Test

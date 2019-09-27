@@ -1,51 +1,46 @@
 package com.it.service.Imp;
 
 import com.it.entity.Category;
+import com.it.mapper.CategoryMapper;
 import com.it.service.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class ICategoryService implements CategoryService {
-    @Override
-    public Integer countCategory() {
-        return null;
-    }
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     @Override
     public List<Category> listCategory() {
-
-        return null;
+        return categoryMapper.listCategory();
     }
 
-    @Override
-    public List<Category> listCategoryWithCount() {
-        return null;
-    }
 
     @Override
     public void deleteCategory(Integer id) {
-
+        categoryMapper.deleteCategory(id);
     }
 
     @Override
     public Category getCategoryById(Integer id) {
-        return null;
+        return categoryMapper.getCategoryById(id);
     }
 
     @Override
-    public Category insertCategory(Category category) {
-        return null;
+    public void insertCategory(Category category) {
+        categoryMapper.insert(category);
     }
 
     @Override
     public void updateCategory(Category category) {
-
+        categoryMapper.update(category);
     }
 
     @Override
     public Category getCategoryByName(String name) {
-        return null;
+        return categoryMapper.getCategoryByName(name);
     }
 }

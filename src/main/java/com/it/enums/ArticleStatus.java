@@ -14,6 +14,7 @@ public enum ArticleStatus {
     @Getter
     @Setter
     private String message;
+
     ArticleStatus(int code, String message) {
         this.code = code;
         this.message = message;

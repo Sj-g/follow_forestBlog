@@ -9,6 +9,7 @@ public interface ArticleCategoryRefMapper {
 
     /**
      * 添加文章和分类关联记录
+     *
      * @param record 关联对象
      * @return 影响行数
      */
@@ -16,6 +17,7 @@ public interface ArticleCategoryRefMapper {
 
     /**
      * 根据分类ID删除记录
+     *
      * @param categoryId 分类ID
      * @return 影响行数
      */
@@ -23,6 +25,7 @@ public interface ArticleCategoryRefMapper {
 
     /**
      * 根据文章ID删除记录
+     *
      * @param articleId 文章ID
      * @return 影响行数
      */
@@ -30,6 +33,7 @@ public interface ArticleCategoryRefMapper {
 
     /**
      * 根据分类ID统计文章数
+     *
      * @param categoryId 分类ID
      * @return 文章数量
      */

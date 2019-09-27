@@ -22,7 +22,8 @@
     <select id="getAdminById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
         select
         <include refid="Base_Column_List"/>
-        from <include refid="tb"/>
+        from
+        <include refid="tb"/>
         where user_id = #{adminId,jdbcType=INTEGER}
     </select>
 
@@ -39,7 +40,8 @@
         admin_nickname, admin_email, admin_last_login_ip, admin_register_time,
         admin_last_login_time, admin_status,admin_class)
         values (#{adminId,jdbcType=INTEGER}, #{adminPass,jdbcType=VARCHAR},
-        #{adminNickname,jdbcType=VARCHAR}, #{adminEmail,jdbcType=VARCHAR}, #{adminLastLoginIp,jdbcType=VARCHAR}, #{adminRegisterTime,jdbcType=TIMESTAMP},
+        #{adminNickname,jdbcType=VARCHAR}, #{adminEmail,jdbcType=VARCHAR}, #{adminLastLoginIp,jdbcType=VARCHAR},
+        #{adminRegisterTime,jdbcType=TIMESTAMP},
         #{adminLastLoginTime,jdbcType=TIMESTAMP}, #{adminStatus,jdbcType=INTEGER})
     </insert>
 
@@ -80,7 +82,6 @@
         </where>
         limit 1
     </select>
-
 
 
 </mapper>

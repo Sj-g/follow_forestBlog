@@ -9,26 +9,24 @@ import java.util.Map;
 public interface ResourceService {
     /**
      * 禁用资源并记录操作
-     * @param id
-     * @param admin
-     * @return
+     * @param id 资源Id
      */
-    int disable(Integer id, HttpServletRequest admin);
+    int disable(Integer id);
     /**
      * 启用资源并记录操作
      */
-    int enable(Integer id, HttpServletRequest admin);
+    int enable(Integer id);
 
     /**
      * 获得一级菜单
-     * @return
+     * @return 一级菜单列表
      */
     List<Resource> getMenu();
 
     /**
      * 根据一级菜单id,获得二级菜单
      * @param authorityResourceId 一级菜单Id
-     * @return
+     * @return 资源
      */
     Resource getTwoMenuById(int authorityResourceId);
     /**

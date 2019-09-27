@@ -9,18 +9,19 @@ public class JsonResult<T> {
      * 200 为成功
      * 100 为失败
      */
-    private  int code;
+    private int code;
     /**
      * 错误信息
      */
-    private  String message;
+    private String message;
     /**
      * 数据
      */
-    private  T date;
+    private T date;
 
     /**
      * 失败构造方法
+     *
      * @param code
      * @param message
      */
@@ -34,9 +35,10 @@ public class JsonResult<T> {
 
     /**
      * 成功构造方法
-     * @param code
-     * @param message
-     * @param date
+     *
+     * @param code    状态码
+     * @param message 信息
+     * @param date    数据
      */
     private JsonResult(int code, String message, T date) {
         this.code = code;
@@ -44,16 +46,19 @@ public class JsonResult<T> {
         this.date = date;
     }
 
-    public  JsonResult fail(){
-        return new JsonResult(100,"失败");
+    public JsonResult fail() {
+        return new JsonResult(100, "失败");
     }
-    public  JsonResult fail(String message){
-        return new JsonResult(100,message);
+
+    public JsonResult fail(String message) {
+        return new JsonResult(100, message);
     }
-    public  JsonResult success(T date){
-        return new JsonResult(200,"操作成功",date);
+
+    public JsonResult success(T date) {
+        return new JsonResult(200, "操作成功", date);
     }
-    public  JsonResult success(){
-        return new JsonResult(200,"操作成功");
+
+    public JsonResult success() {
+        return new JsonResult(200, "操作成功");
     }
 }

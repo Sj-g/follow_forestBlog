@@ -12,8 +12,34 @@ import java.util.List;
 public class ITagService implements TagService {
     @Autowired
     private TagMapper tagMapper;
+
     @Override
     public List<Tag> tagList() {
         return tagMapper.listTag();
+    }
+
+    @Override
+    public Integer deleteTag(Integer tagId) {
+        return tagMapper.deleteById(tagId);
+    }
+
+    @Override
+    public Integer modTag(Tag tag) {
+        return tagMapper.update(tag);
+    }
+
+    @Override
+    public Integer addTag(Tag tag) {
+        return tagMapper.insert(tag);
+    }
+
+    @Override
+    public Tag getTag(Integer tagId) {
+        return tagMapper.getTagById(tagId);
+    }
+
+    @Override
+    public Tag getTagByName(String tagName) {
+        return tagMapper.getTagByName(tagName);
     }
 }
