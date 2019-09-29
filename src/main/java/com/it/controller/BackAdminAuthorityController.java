@@ -23,10 +23,13 @@ import java.util.Map;
  */
 @Controller
 public class BackAdminAuthorityController {
+    private final AdminService adminService;
+    private final AuthorityService authorityService;
     @Autowired
-    private AdminService adminService;
-    @Autowired
-    private AuthorityService authorityService;
+    public BackAdminAuthorityController(AdminService adminService, AuthorityService authorityService) {
+        this.adminService = adminService;
+        this.authorityService = authorityService;
+    }
 
     /**
      * 获得低于此管理员的管理员

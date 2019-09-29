@@ -17,11 +17,15 @@ import java.util.*;
 @Service
 @Slf4j
 public class IAuthorityService implements AuthorityService {
-    @Autowired
-    private AuthorityMapper authorityMapper;
+    private final AuthorityMapper authorityMapper;
+
+    private final ResourceMapper resourceMapper;
 
     @Autowired
-    private ResourceMapper resourceMapper;
+    public IAuthorityService(AuthorityMapper authorityMapper, ResourceMapper resourceMapper) {
+        this.authorityMapper = authorityMapper;
+        this.resourceMapper = resourceMapper;
+    }
 
     @Override
     public List<Authority> getAuthority(Integer adminId) {

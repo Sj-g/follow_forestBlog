@@ -19,17 +19,21 @@ import java.util.Map;
 
 @Service
 public class IResourceService implements ResourceService {
+    private final ResourceMapper resourceMapper;
+    private final RecordMapper recordMapper;
+
     @Autowired
-    private ResourceMapper resourceMapper;
-    @Autowired
-    private RecordMapper recordMapper;
+    public IResourceService(RecordMapper recordMapper, ResourceMapper resourceMapper) {
+        this.recordMapper = recordMapper;
+        this.resourceMapper = resourceMapper;
+    }
 
     @Override
     public int disable(Integer id) {
         Resource resource = resourceMapper.findResourceById(id);
         //设置禁用
         resource.setResourceStatus(ResourceStatus.UNABLE.getCode());
-        int result=resourceMapper.disableAndEnable(resource);
+        int result = resourceMapper.disableAndEnable(resource);
         return result;
     }
 
@@ -48,16 +52,16 @@ public class IResourceService implements ResourceService {
 
     @Override
     public Resource getTwoMenuById(int authorityResourceId) {
-       return resourceMapper.findResourceById(authorityResourceId);
+        return resourceMapper.findResourceById(authorityResourceId);
     }
 
     @Override
-    public Map<String,List<Resource>> geListResource() {
-        Map<String,List<Resource>> map=new HashMap<>();
-        List<Resource> resourceList=resourceMapper.findResourceByOrder(0);
-        for (Resource resource:resourceList){
-            List<Resource> resourceList1=resourceMapper.findResourceByOrder(resource.getResourceId());
-            map.put(resource.getResourceName(),resourceList1);
+    public Map<String, List<Resource>> geListResource() {
+        Map<String, List<Resource>> map = new HashMap<>();
+        List<Resource> resourceList = resourceMapper.findResourceByOrder(0);
+        for (Resource resource : resourceList) {
+            List<Resource> resourceList1 = resourceMapper.findResourceByOrder(resource.getResourceId());
+            map.put(resource.getResourceName(), resourceList1);
         }
         return map;
     }

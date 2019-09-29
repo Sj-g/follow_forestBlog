@@ -10,8 +10,12 @@ import java.util.List;
 
 @Service
 public class ITagService implements TagService {
+    private final TagMapper tagMapper;
+
     @Autowired
-    private TagMapper tagMapper;
+    public ITagService(TagMapper tagMapper) {
+        this.tagMapper = tagMapper;
+    }
 
     @Override
     public List<Tag> tagList() {

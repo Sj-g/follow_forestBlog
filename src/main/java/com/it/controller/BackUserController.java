@@ -21,8 +21,12 @@ import java.util.Map;
 
 @Controller
 public class BackUserController {
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public BackUserController(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * 获得管理员列表
@@ -47,7 +51,7 @@ public class BackUserController {
     @RequestMapping("/enUser")
     public ResponseVo enUser(@NotNull Integer userId) {
         Integer integer = userService.enUser(userId);
-        if (integer == null||integer<=0) {
+        if (integer == null || integer <= 0) {
             ResponseVo.fail();
         }
         return ResponseVo.success();
@@ -62,7 +66,7 @@ public class BackUserController {
     @RequestMapping("/unUser")
     public ResponseVo unUser(@NotNull Integer userId) {
         Integer integer = userService.unUser(userId);
-        if (integer == null||integer<=0) {
+        if (integer == null || integer <= 0) {
             ResponseVo.fail();
         }
         return ResponseVo.success();
@@ -77,7 +81,7 @@ public class BackUserController {
     @RequestMapping("/modUser")
     public ResponseVo modUser(@RequestBody @Valid User user) {
         Integer integer = userService.updateUser(user);
-        if (integer == null||integer<=0) {
+        if (integer == null || integer <= 0) {
             ResponseVo.fail();
         }
         return ResponseVo.success();
@@ -104,7 +108,7 @@ public class BackUserController {
         }
         user.setUserLastLoginIp(MyUtils.getIpAddr(request));
         Integer integer = userService.addUser(user);
-        if (integer == null||integer<=0) {
+        if (integer == null || integer <= 0) {
             ResponseVo.fail();
         }
         return ResponseVo.success();

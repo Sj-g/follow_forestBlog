@@ -86,9 +86,9 @@
                 article.article_id in (
                 select article_tag_ref.article_id from article_tag_ref
                 where article_category_ref.category_id =#{categoryId}
-                ) <!--and-->
+                ) and
             </if>
-            -- 1=1
+            1=1
         </where>
         order by article.article_order desc ,article.articel_id desc;
     </select>
@@ -120,28 +120,12 @@
     <select id="getArticleByStatusAndId" resultMap="BaseResultMap">
         select * from article where article_id=#{id} and article_status=#{status};
     </select>
-    <!--    获得评论最多的文章-->
-    <select id="listArticleByViewCount" resultMap="BaseResultMap">
+    <!--    获得最火的文章-->
+    <select id="listArticleByViewCountAndComment" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_list"/>
         from article where article_status=1
-        order by article_comment_count desc,article_order,article_id desc limit #{limit}
-    </select>
-    <!--    获取上一篇-->
-    <select id="getAfterArticle" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_list"/>
-        from article
-        where article_id &lt; #{id} and article_status=1
-        limit 1
-    </select>
-    <!--    获取下一篇-->
-    <select id="getPreArticle" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_list"/>
-        from article
-        where article_id > #{id} and article_status=1
-        limit 1
+        order by article_like_count desc,article_comment_count desc,article_view_count desc limit #{limit}
     </select>
     <!--    随机文章-->
     <select id="listRandomArticle" resultMap="BaseResultMap">
@@ -150,15 +134,6 @@
         from article
         where article_status=1
         order by RAND()
-        limit #{limit}
-    </select>
-    <!--    获得热评文章-->
-    <select id="listArticleByCommentCount">
-        select
-        <include refid="Base_Column_list"/>
-        from article
-        where article_status=1
-        order by article_comment_count desc,article_order DESC, article_id DESC
         limit #{limit}
     </select>
     <update id="updateCommentCount" parameterType="int">
@@ -221,7 +196,7 @@
         ORDER BY article_id DESC
         LIMIT #{value}
     </select>
-<!--    批量删除-->
+<!--    批量删除通过文章Id-->
     <delete id="deleteBatch" parameterType="list">
         delete from article
         <if test="ids !=null">

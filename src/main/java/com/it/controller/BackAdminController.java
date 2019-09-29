@@ -21,10 +21,14 @@ import java.util.Map;
  */
 @Controller
 public class BackAdminController {
+    private final AdminService adminService;
+    private final AuthorityService authorityService;
+
     @Autowired
-    private AdminService adminService;
-    @Autowired
-    private AuthorityService authorityService;
+    public BackAdminController(AuthorityService authorityService, AdminService adminService) {
+        this.authorityService = authorityService;
+        this.adminService = adminService;
+    }
 
     /**
      * 登陆

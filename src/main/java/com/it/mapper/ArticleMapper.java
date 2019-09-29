@@ -79,36 +79,18 @@ public interface ArticleMapper {
                                      @Param("pageIndex") Integer pageIndex);
 
     /**
-     * 访问最多的文章
+     * 最火的文章
      *
      * @param limit
      * @return
      */
-    public List<Article> listArticleByViewCount(@Param("limit") Integer limit);
+    public List<Article> listArticleByViewCountAndComment(@Param("limit") Integer limit);
 
-    /**
-     * 获取上一篇
-     */
-    public Article getAfterArticle(@Param("id") Integer Id);
-
-    /**
-     * 获得下一篇
-     */
-    public Article getPreArticle(@Param("id") Integer id);
 
     /**
      * 获得随机文章
      */
     public List<Article> listRandomArticle(@Param("limit") Integer limit);
-
-    /**
-     * 获得热评文章
-     *
-     * @param limit
-     * @return
-     */
-    public List<Article> listArticleByCommentCount(@Param("limit") Integer limit);
-
     /**
      * 更新文章的评论数
      */

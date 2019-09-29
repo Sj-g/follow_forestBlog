@@ -111,4 +111,12 @@ public class ArticleMapperTest extends BaseTest {
     @Test
     public void deleteBatch() {
     }
+
+    @Test
+    public void listArticleByViewCountAndComment() {
+        List<Article> articleList=articleMapper.listArticleByViewCountAndComment(5);
+        for (Article article:articleList){
+            System.out.println(article);
+        }
+    }
 }

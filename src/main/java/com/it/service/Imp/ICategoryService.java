@@ -1,6 +1,7 @@
 package com.it.service.Imp;
 
 import com.it.entity.Category;
+import com.it.enums.CategoryStair;
 import com.it.mapper.CategoryMapper;
 import com.it.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +11,24 @@ import java.util.List;
 
 @Service
 public class ICategoryService implements CategoryService {
+    private final CategoryMapper categoryMapper;
+
     @Autowired
-    private CategoryMapper categoryMapper;
+    public ICategoryService(CategoryMapper categoryMapper) {
+        this.categoryMapper = categoryMapper;
+    }
 
     @Override
     public List<Category> listCategory() {
-        return categoryMapper.listCategory();
+        List<Category> categoryList = categoryMapper.listCategory();
+        for (int i = 0; i < categoryList.size(); i++) {
+            if (categoryList.get(i).getCategoryPid() == CategoryStair.Stair.getCode()) {
+                categoryList.get(i).setStair(CategoryStair.Stair.getCode());
+            } else {
+                categoryList.get(i).setStair(CategoryStair.Second.getCode());
+            }
+        }
+        return categoryList;
     }
 
 
@@ -42,5 +55,10 @@ public class ICategoryService implements CategoryService {
     @Override
     public Category getCategoryByName(String name) {
         return categoryMapper.getCategoryByName(name);
+    }
+
+    @Override
+    public List<Category> getCategoryBypId(Integer pId) {
+        return categoryMapper.findChildCategory(pId);
     }
 }

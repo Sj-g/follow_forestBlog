@@ -37,4 +37,17 @@ public interface ArticleService {
      * @param admin 管理员Id
      */
     Integer addArticle(Article article, Admin admin, List<Category> categoryList,List<Tag> tagList);
+
+    /**
+     * 获得最新的5篇文章
+     * @return 文章
+     */
+    List<Article> getNewestArticle();
+
+    /**
+     * 最受欢迎的文章
+     * 根据评论人数和观看人数和喜欢人数确定
+     * @return 文章
+     */
+    List<Article> getMostPopularArticle();
 }

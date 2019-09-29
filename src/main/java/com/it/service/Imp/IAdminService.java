@@ -14,12 +14,16 @@ import java.util.*;
 
 @Service
 public class IAdminService implements AdminService {
+    private final AdminMapper adminMapper;
+    private final AuthorityMapper authorityMapper;
+    private final ResourceMapper resourceMapper;
+
     @Autowired
-    private AdminMapper adminMapper;
-    @Autowired
-    private AuthorityMapper authorityMapper;
-    @Autowired
-    private ResourceMapper resourceMapper;
+    public IAdminService(AdminMapper adminMapper, AuthorityMapper authorityMapper, ResourceMapper resourceMapper) {
+        this.adminMapper = adminMapper;
+        this.authorityMapper = authorityMapper;
+        this.resourceMapper = resourceMapper;
+    }
 
     @Override
     public Admin getAdminByEmail(String email) {

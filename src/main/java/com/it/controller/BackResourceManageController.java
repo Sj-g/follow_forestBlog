@@ -22,8 +22,12 @@ import java.util.Map;
  */
 @Controller
 public class BackResourceManageController {
+    private final ResourceService resourceService;
+
     @Autowired
-    private ResourceService resourceService;
+    public BackResourceManageController(ResourceService resourceService) {
+        this.resourceService = resourceService;
+    }
 
     /**
      * 禁用资源

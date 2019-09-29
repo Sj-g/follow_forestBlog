@@ -21,10 +21,14 @@ import java.util.List;
  */
 @Controller
 public class BackArticleController {
+    private final ArticleService articleService;
+    private final CommentService commentService;
+
     @Autowired
-    private ArticleService articleService;
-    @Autowired
-    private CommentService commentService;
+    public BackArticleController(ArticleService articleService, CommentService commentService) {
+        this.articleService = articleService;
+        this.commentService = commentService;
+    }
 
     /**
      * 删除文章
@@ -83,7 +87,7 @@ public class BackArticleController {
     @RequestMapping(value = "/updateArticle", method = RequestMethod.PUT)
     public ResponseVo updateArticle(Article article) {
         Integer integer = articleService.updateArticle(article);
-        if (integer == null) {
+        if (integer == null || integer <= 0) {
             return ResponseVo.fail();
         }
         return ResponseVo.success();
@@ -100,8 +104,8 @@ public class BackArticleController {
     @RequestMapping("/addArticle")
     public ResponseVo addArticle(Article article, HttpServletRequest request, List<Category> categoryList, List<Tag> tagList) {
         Admin admin = (Admin) request.getSession().getAttribute("admin");
-        Integer integer = articleService.addArticle(article, admin,categoryList,tagList);
-        if (integer == null||integer<=0) {
+        Integer integer = articleService.addArticle(article, admin, categoryList, tagList);
+        if (integer == null || integer <= 0) {
             return ResponseVo.fail();
         }
         return ResponseVo.success();

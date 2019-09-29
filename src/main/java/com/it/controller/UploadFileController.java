@@ -23,8 +23,12 @@ import java.util.UUID;
 @Controller
 @Slf4j
 public class UploadFileController {
+    private final UserMapper userMapper;
+
     @Autowired
-    private UserMapper userMapper;
+    public UploadFileController(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
 
     /**
      * 文件上传

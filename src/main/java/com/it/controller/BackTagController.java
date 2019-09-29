@@ -3,6 +3,7 @@ package com.it.controller;
 import com.it.dto.ResponseVo;
 import com.it.entity.Tag;
 import com.it.service.TagService;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,8 +17,12 @@ import java.util.List;
  */
 @Controller
 public class BackTagController {
+    private final TagService tagService;
+
     @Autowired
-    private TagService tagService;
+    public BackTagController(TagService tagService) {
+        this.tagService = tagService;
+    }
 
     /**
      * 查询分类的列表
@@ -42,7 +47,7 @@ public class BackTagController {
     @RequestMapping(value = "/deleteTag", method = RequestMethod.DELETE)
     public ResponseVo deleteTag(Integer tagId) {
         Integer integer = tagService.deleteTag(tagId);
-        if (integer == null||integer<=0) {
+        if (integer == null || integer <= 0) {
             ResponseVo.fail();
         }
         return ResponseVo.success();
@@ -57,7 +62,7 @@ public class BackTagController {
     @RequestMapping(value = "/modTag", method = RequestMethod.PUT)
     public ResponseVo modTag(Tag tag) {
         Integer integer = tagService.modTag(tag);
-        if (integer == null||integer<=0) {
+        if (integer == null || integer <= 0) {
             ResponseVo.fail();
         }
         return ResponseVo.success();
@@ -72,7 +77,7 @@ public class BackTagController {
     @RequestMapping("/addTag")
     public ResponseVo addTag(Tag tag) {
         Integer integer = tagService.addTag(tag);
-        if (integer == null||integer<=0) {
+        if (integer == null || integer <= 0) {
             ResponseVo.fail();
         }
         return ResponseVo.success();

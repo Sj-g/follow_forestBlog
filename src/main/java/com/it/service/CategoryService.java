@@ -50,4 +50,5 @@ public interface CategoryService {
      */
     Category getCategoryByName(String name);
 
+    List<Category> getCategoryBypId(Integer pId);
 }

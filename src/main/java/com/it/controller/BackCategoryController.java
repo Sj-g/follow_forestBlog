@@ -6,17 +6,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
 @Controller
 public class BackCategoryController {
+    private final CategoryService categoryService;
     @Autowired
-    private CategoryService categoryService;
+    public BackCategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
     /**
      * 查询文章列表
+     * 一级分类有二级菜单的时候无法删除
+     * 当Stair为0的时候无删除按钮
      *
      * @param modelAndView 分类列表
      * @return 分类列表
@@ -37,6 +43,7 @@ public class BackCategoryController {
      */
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public void deleteCategory(Integer categoryId) {
+
         categoryService.deleteCategory(categoryId);
     }
 
@@ -89,4 +96,22 @@ public class BackCategoryController {
         return modelAndView;
     }
 
+    /**
+     * 这个方法主要是对分类的的处理
+     * 根据数据库的结构 通过pid来获得一级分类的二级分类
+     * 首先应该先获得一级分类通过pid=0
+     * 然后通过一级分类的id来当pid去查询二级分类
+     *
+     * @param Pid          id
+     * @param modelAndView 分类
+     * @return 分类
+     */
+    @RequestMapping("/getCategoryByPid")
+    @ResponseBody
+    public ModelAndView getCategoryByPid(Integer Pid, ModelAndView modelAndView) {
+        List<Category> categoryList = categoryService.getCategoryBypId(Pid);
+        modelAndView.addObject("categoryList", categoryList);
+        modelAndView.setViewName("");
+        return modelAndView;
+    }
 }

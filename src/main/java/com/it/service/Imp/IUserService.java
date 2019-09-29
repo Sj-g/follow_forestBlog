@@ -13,11 +13,16 @@ import java.util.List;
 @Service
 @Slf4j
 public class IUserService implements UserService {
+    private final UserMapper userMapper;
+
     @Autowired
-    private UserMapper userMapper;
+    public IUserService(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
+
     @Override
     public User getUserByEmail(String email) {
-        return  userMapper.getUserByEmail(email);
+        return userMapper.getUserByEmail(email);
     }
 
     @Override
@@ -27,35 +32,35 @@ public class IUserService implements UserService {
 
     @Override
     public Integer enUser(Integer userId) {
-        Integer integer=userMapper.setStatus(1,userId);
+        Integer integer = userMapper.setStatus(1, userId);
         return integer;
     }
 
     @Override
     public Integer unUser(Integer userId) {
-        Integer integer=userMapper.setStatus(0,userId);
+        Integer integer = userMapper.setStatus(0, userId);
         return integer;
     }
 
     @Override
     public Integer updateUser(User user) {
-        Integer integer=null;
+        Integer integer = null;
         try {
-             integer=userMapper.update(user);
+            integer = userMapper.update(user);
         } catch (Exception e) {
             e.printStackTrace();
-            log.error("用户更新失败,case{},user{}",e,user);
+            log.error("用户更新失败,case{},user{}", e, user);
         }
         return integer;
     }
 
     @Override
     public Integer addUser(User user) {
-        Integer integer=null;
+        Integer integer = null;
         user.setUserRegisterTime(new Date());
         user.setUserStatus(1);
         try {
-            integer=userMapper.insert(user);
+            integer = userMapper.insert(user);
         } catch (Exception e) {
             e.printStackTrace();
         }
