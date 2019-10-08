@@ -86,10 +86,7 @@ public class BackArticleController {
      */
     @RequestMapping(value = "/updateArticle", method = RequestMethod.PUT)
     public ResponseVo updateArticle(Article article) {
-        Integer integer = articleService.updateArticle(article);
-        if (integer == null || integer <= 0) {
-            return ResponseVo.fail();
-        }
+        articleService.updateArticle(article);
         return ResponseVo.success();
     }
 
@@ -104,10 +101,7 @@ public class BackArticleController {
     @RequestMapping("/addArticle")
     public ResponseVo addArticle(Article article, HttpServletRequest request, List<Category> categoryList, List<Tag> tagList) {
         Admin admin = (Admin) request.getSession().getAttribute("admin");
-        Integer integer = articleService.addArticle(article, admin, categoryList, tagList);
-        if (integer == null || integer <= 0) {
-            return ResponseVo.fail();
-        }
+        articleService.addArticle(article, admin, categoryList, tagList);
         return ResponseVo.success();
     }
 }

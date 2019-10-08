@@ -8,6 +8,7 @@ import com.it.service.AuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -71,11 +72,9 @@ public class BackAdminAuthorityController {
      * 禁用权限
      */
     @RequestMapping("/unAbleAuthority")
+    @ResponseBody
     public ResponseVo unAbleAuthority(@NotNull Integer resourceId, @NotNull Integer adminId) {
-        Integer integer = authorityService.unAble(resourceId, adminId);
-        if (integer == null|| integer<=0) {
-            return ResponseVo.fail();
-        }
+        authorityService.unAble(resourceId, adminId);
         return ResponseVo.success();
     }
 
@@ -83,11 +82,9 @@ public class BackAdminAuthorityController {
      * 启用权限
      */
     @RequestMapping("/enAbleAuthority")
+    @ResponseBody
     public ResponseVo enAbleAuthority(@NotNull Integer resourceId, @NotNull Integer adminId, HttpServletRequest request) {
-        Integer integer = authorityService.enAble(resourceId, adminId, request);
-        if (integer == null||integer<=0) {
-            return ResponseVo.fail();
-        }
+        authorityService.enAble(resourceId, adminId, request);
         return ResponseVo.success();
     }
 

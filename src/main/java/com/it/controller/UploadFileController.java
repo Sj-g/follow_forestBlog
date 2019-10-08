@@ -34,12 +34,11 @@ public class UploadFileController {
      * 文件上传
      *
      * @param multipartFile 上传文件
-     * @return 上传结果
      * 待测试
      */
     @RequestMapping("/upload")
     @ResponseBody
-    public JsonResult<User> uploadFile(MultipartFile multipartFile, HttpServletRequest request, Integer userId) {
+    public void uploadFile(MultipartFile multipartFile, HttpServletRequest request, Integer userId) {
         //创建文件名
         String name = UUID.randomUUID().toString().replace("-", "");
         //获取后缀名
@@ -52,21 +51,16 @@ public class UploadFileController {
             //创建由此抽象路径名命名的目录，包括任何必需但不存在的父目录。 请注意，如果此操作失败，它可能已成功创建一些必需的父目录。
             file.mkdir();
         }
-        //返回的结果集
-        JsonResult<User> jsonResult = new JsonResult<User>();
         //上传路径
         String path = url + "/" + name + "." + fileName;
         try {
             multipartFile.transferTo(new File(path));
         } catch (IOException e) {
-            e.printStackTrace();
             log.error("文件上传失败，case{},path{}", e, path);
-            return jsonResult.fail();
         }
         //保存路径到数据库
         User user = userMapper.getUserById(userId);
         user.setUserImg(path);
         userMapper.update(user);
-        return jsonResult.success(user);
     }
 }

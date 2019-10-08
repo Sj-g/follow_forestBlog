@@ -136,12 +136,16 @@
         order by RAND()
         limit #{limit}
     </select>
+
     <update id="updateCommentCount" parameterType="int">
         update
-        <include refid="Base_Column_list"/>
-        set article_comment_count=(
-        select * from comment where article_id=comment_id
-        )
+        article
+        set article_comment_count =
+        (
+        select count(*) from comment
+        where article.article_id=comment.comment_article_id
+        ),
+        article_is_comment = 1
         where article_id=#{articleId}
     </update>
     <!--    获得最后更新的文章-->

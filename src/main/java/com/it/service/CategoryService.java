@@ -1,5 +1,6 @@
 package com.it.service;
 
+import com.it.entity.Article;
 import com.it.entity.Category;
 
 import java.util.List;
@@ -51,4 +52,6 @@ public interface CategoryService {
     Category getCategoryByName(String name);
 
     List<Category> getCategoryBypId(Integer pId);
+
+    List<Category> getCategoryByArticleId(Integer article);
 }

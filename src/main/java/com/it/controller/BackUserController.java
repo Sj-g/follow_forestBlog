@@ -50,10 +50,7 @@ public class BackUserController {
      */
     @RequestMapping("/enUser")
     public ResponseVo enUser(@NotNull Integer userId) {
-        Integer integer = userService.enUser(userId);
-        if (integer == null || integer <= 0) {
-            ResponseVo.fail();
-        }
+        userService.enUser(userId);
         return ResponseVo.success();
     }
 
@@ -65,10 +62,8 @@ public class BackUserController {
      */
     @RequestMapping("/unUser")
     public ResponseVo unUser(@NotNull Integer userId) {
-        Integer integer = userService.unUser(userId);
-        if (integer == null || integer <= 0) {
-            ResponseVo.fail();
-        }
+        userService.unUser(userId);
+
         return ResponseVo.success();
     }
 
@@ -80,10 +75,7 @@ public class BackUserController {
      */
     @RequestMapping("/modUser")
     public ResponseVo modUser(@RequestBody @Valid User user) {
-        Integer integer = userService.updateUser(user);
-        if (integer == null || integer <= 0) {
-            ResponseVo.fail();
-        }
+        userService.updateUser(user);
         return ResponseVo.success();
     }
 
@@ -107,10 +99,7 @@ public class BackUserController {
             return ResponseVo.fail().add(map);
         }
         user.setUserLastLoginIp(MyUtils.getIpAddr(request));
-        Integer integer = userService.addUser(user);
-        if (integer == null || integer <= 0) {
-            ResponseVo.fail();
-        }
+        userService.addUser(user);
         return ResponseVo.success();
     }
 

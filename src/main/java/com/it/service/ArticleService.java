@@ -7,6 +7,7 @@ import com.it.entity.Category;
 import com.it.entity.Tag;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ArticleService {
     /**
@@ -50,4 +51,30 @@ public interface ArticleService {
      * @return 文章
      */
     List<Article> getMostPopularArticle();
+
+    /**
+     * 获得文章 评论 分类 标签
+     * @param articleId 文章ID
+     * @return 文章 评论 分类 标签
+     */
+    Article getArticleByIdAndsUser(Integer articleId);
+
+    /**
+     * 更新评论的数量 设置更新的是否
+     * @param articleId 文章的ID
+     */
+    Integer updateComment(Integer articleId);
+
+    /**
+     * 更新文章喜欢的人数
+     * @param articleId 文章Id
+     */
+    Integer updateArticleLikeCount(Integer articleId);
+
+    /**
+     * 模糊查询
+     * @param message 信息
+     * @return 文章
+     */
+    List<Article> search(Map<String,Object> message);
 }

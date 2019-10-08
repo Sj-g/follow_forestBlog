@@ -46,10 +46,8 @@ public class BackTagController {
      */
     @RequestMapping(value = "/deleteTag", method = RequestMethod.DELETE)
     public ResponseVo deleteTag(Integer tagId) {
-        Integer integer = tagService.deleteTag(tagId);
-        if (integer == null || integer <= 0) {
-            ResponseVo.fail();
-        }
+        tagService.deleteTag(tagId);
+
         return ResponseVo.success();
     }
 
@@ -61,10 +59,8 @@ public class BackTagController {
      */
     @RequestMapping(value = "/modTag", method = RequestMethod.PUT)
     public ResponseVo modTag(Tag tag) {
-        Integer integer = tagService.modTag(tag);
-        if (integer == null || integer <= 0) {
-            ResponseVo.fail();
-        }
+        tagService.modTag(tag);
+
         return ResponseVo.success();
     }
 
@@ -76,10 +72,8 @@ public class BackTagController {
      */
     @RequestMapping("/addTag")
     public ResponseVo addTag(Tag tag) {
-        Integer integer = tagService.addTag(tag);
-        if (integer == null || integer <= 0) {
-            ResponseVo.fail();
-        }
+        tagService.addTag(tag);
+
         return ResponseVo.success();
     }
 

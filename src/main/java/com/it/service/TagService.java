@@ -1,5 +1,6 @@
 package com.it.service;
 
+import com.it.entity.Article;
 import com.it.entity.Tag;
 
 import java.util.List;
@@ -41,4 +42,6 @@ public interface TagService {
      * @return 标签
      */
     Tag getTagByName(String tagName);
+
+    List<Tag> getTagByArticleId(Integer article);
 }

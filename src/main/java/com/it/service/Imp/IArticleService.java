@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -79,7 +79,7 @@ public class IArticleService implements ArticleService {
         article.setArticleViewCount(ARTICLE_PARAMETER);
         article.setArticleLikeCount(ARTICLE_PARAMETER);
         article.setArticleIsComment(ARTICLE_PARAMETER);
-        //order是一个关于顺序的操作，默认的分组顺序，这里我们按照管理员的权限来安排顺序
+        //
         article.setArticleOrder(admin.getAdminClass());
 //        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
 //        String date=simpleDateFormat.format(new Date());
@@ -114,4 +114,37 @@ public class IArticleService implements ArticleService {
     public List<Article> getMostPopularArticle() {
         return articleMapper.listArticleByViewCountAndComment(PAGE_NUMBER);
     }
+
+    @Override
+    public Article getArticleByIdAndsUser(Integer articleId) {
+        //获得文章
+        Article article=articleMapper.getArticleByStatusAndId(ArticleStatus.PUBLISHED.getCode(), articleId);
+        article.setArticleViewCount(article.getArticleViewCount()+1);
+        //更新文章的观看数
+        articleMapper.updateArticle(article);
+        return article;
+    }
+
+    @Override
+    public Integer updateComment(Integer articleId) {
+        articleMapper.updateCommentCount(articleId);
+        Article article=articleMapper.getArticleByStatusAndId(ArticleStatus.PUBLISHED.getCode(),articleId);
+        return article.getArticleCommentCount();
+    }
+
+    @Override
+    public Integer updateArticleLikeCount(Integer articleId) {
+        Article article=articleMapper.getArticleByStatusAndId(ArticleStatus.PUBLISHED.getCode(),articleId);
+        article.setArticleLikeCount(article.getArticleLikeCount()+1);
+        articleMapper.updateArticle(article);
+        return article.getArticleLikeCount()+1;
+    }
+
+    @Override
+    public List<Article> search(Map<String,Object> message) {
+        List<Article> articleList=articleMapper.findAll(message);
+        return articleList;
+    }
+
+
 }

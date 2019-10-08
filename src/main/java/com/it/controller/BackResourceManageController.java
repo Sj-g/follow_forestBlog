@@ -37,10 +37,7 @@ public class BackResourceManageController {
      */
     @RequestMapping(value = "/disable/{id}", method = RequestMethod.PUT)
     public ResponseVo disable(@PathVariable Integer id, HttpServletRequest request) {
-        int judgeSuccess = resourceService.disable(id);
-        if (judgeSuccess != 1) {
-            return ResponseVo.fail();
-        }
+        resourceService.disable(id);
         return ResponseVo.success();
     }
 
@@ -52,10 +49,7 @@ public class BackResourceManageController {
      */
     @RequestMapping(value = "/enable/{id}", method = RequestMethod.PUT)
     public ResponseVo enable(@PathVariable Integer id, HttpServletRequest request) {
-        int judgeSuccess = resourceService.enable(id);
-        if (judgeSuccess <= 0) {
-            return ResponseVo.fail();
-        }
+        resourceService.enable(id);
         return ResponseVo.success();
     }
 

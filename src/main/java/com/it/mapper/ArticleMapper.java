@@ -32,7 +32,7 @@ public interface ArticleMapper {
     public int updateArticle(Article article);
 
     /**
-     * 查询所有文章(复杂查询)
+     * 查询所有文章(复杂查询,搜索可用，模糊查询)
      *
      * @return
      */
@@ -94,7 +94,7 @@ public interface ArticleMapper {
     /**
      * 更新文章的评论数
      */
-    public void updateCommentCount(@Param("articleId") Integer limit);
+    public void updateCommentCount(@Param("articleId") Integer articleId);
 
     /**
      * 获得最后更新的记录

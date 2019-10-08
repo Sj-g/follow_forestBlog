@@ -119,4 +119,9 @@ public class ArticleMapperTest extends BaseTest {
             System.out.println(article);
         }
     }
+
+    @Test
+    public void testUpdateCommentCount() {
+        articleMapper.updateCommentCount(2);
+    }
 }

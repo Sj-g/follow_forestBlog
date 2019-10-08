@@ -2,7 +2,9 @@ package com.it.service;
 
 import com.it.entity.Article;
 import com.it.entity.Comment;
+import com.it.entity.User;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface CommentService {
@@ -17,4 +19,6 @@ public interface CommentService {
      * @return 评论列表
      */
     List<Comment> getCommentByArticleId(Integer articleId);
+
+    void saveComment(String com, Integer articleId, Integer user, HttpServletRequest request);
 }

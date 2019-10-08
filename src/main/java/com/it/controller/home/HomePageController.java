@@ -7,10 +7,8 @@ import com.it.entity.Tag;
 import com.it.service.ArticleService;
 import com.it.service.CategoryService;
 import com.it.service.TagService;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -39,12 +37,12 @@ public class HomePageController {
         //标签列表
         List<Tag> tagList=tagService.tagList();
         modelAndView.addObject("tagList",tagList);
-        //分档查询
-
         //最新文章
         List<Article> articleList2=articleService.getNewestArticle();
+        modelAndView.addObject("newestArticle",articleList2);
         //最火文章
         List<Article> articleList1=articleService.getMostPopularArticle();
+        modelAndView.addObject("mostPoplarArticle",articleList1);
         return modelAndView;
     }
 }
