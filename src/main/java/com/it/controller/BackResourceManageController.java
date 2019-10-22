@@ -1,16 +1,13 @@
 package com.it.controller;
 
-import com.it.dto.ResponseVo;
 import com.it.entity.Resource;
 import com.it.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -35,10 +32,13 @@ public class BackResourceManageController {
      * @param id 资源Id
      * @return 操作结果
      */
-    @RequestMapping(value = "/disable/{id}", method = RequestMethod.PUT)
-    public ResponseVo disable(@PathVariable Integer id, HttpServletRequest request) {
+    @RequestMapping(value = "/disable/{id}")
+    public String disable(@PathVariable Integer id) {
+        if (id == null) {
+            throw new RuntimeException("资源不存在");
+        }
         resourceService.disable(id);
-        return ResponseVo.success();
+        return "redirect:/resourceList";
     }
 
     /**
@@ -47,10 +47,13 @@ public class BackResourceManageController {
      * @param id 资源Id
      * @return 返回结果
      */
-    @RequestMapping(value = "/enable/{id}", method = RequestMethod.PUT)
-    public ResponseVo enable(@PathVariable Integer id, HttpServletRequest request) {
+    @RequestMapping("/enable/{id}")
+    public String enable(@PathVariable Integer id) {
+        if (id == null) {
+            throw new RuntimeException("资源不存在");
+        }
         resourceService.enable(id);
-        return ResponseVo.success();
+        return "redirect:/resourceList";
     }
 
     /**
@@ -60,7 +63,7 @@ public class BackResourceManageController {
     public ModelAndView resourceList(ModelAndView modelAndView) {
         Map<String, List<Resource>> stringListMap = resourceService.geListResource();
         modelAndView.addObject("stringListMap", stringListMap);
-        modelAndView.setViewName("");
+        modelAndView.setViewName("admin/resource");
         return modelAndView;
     }
 

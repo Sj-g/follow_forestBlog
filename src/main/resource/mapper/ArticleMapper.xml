@@ -36,11 +36,16 @@
     #{articleIsComment,jdbcType=INTEGER}, #{articleStatus,jdbcType=INTEGER}, #{articleOrder,jdbcType=INTEGER},
     #{articleContent,jdbcType=LONGVARCHAR}, #{articleSummary,jdbcType=VARCHAR})
     </insert>
-    <!--    通过Id删除文章-->
-    <delete id="deleteArticleById" parameterType="int">
+    <!--    通过Id禁用文章-->
+    <update id="banArticleById" parameterType="int">
         update article set article_status=0
         where article_id=#{articleId}
-    </delete>
+    </update>
+    <!--    通过Id启用文章-->
+    <update id="starArticleById" parameterType="int">
+        update article set article_status=1
+        where article_id=#{articleId}
+    </update>
     <!--    有选择的更新文章信息-->
     <update id="updateArticle" parameterType="com.it.entity.Article">
         update article
@@ -51,7 +56,7 @@
             <if test="articleViewCount !=null">article_view_count=#{articleViewCount},</if>
             <if test="articleCommentCount !=null">article_comment_count=#{articleCommentCount},</if>
             <if test="articleLikeCount !=null">article_like_count=#{articleLikeCount},</if>
-            <if test="articleIsComment !=null">article_is_comment=#{arcticleIsComment},</if>
+            <if test="articleIsComment !=null">article_is_comment=#{articleIsComment},</if>
             <if test="articleStatus !=null">article_status=#{articleStatus},</if>
             <if test="articleOrder !=null">article_order=#{articleOrder},</if>
             <if test="articleUpdateTime !=null">article_update_time=#{articleUpdateTime},</if>
@@ -69,28 +74,28 @@
                 article.article_status=#{status} and
             </if>
             <if test="keywords !=null">
-                article.article_title LIKE concat(concat('%',#{keyword}),'%') and
+                article.article_title LIKE concat(concat('%',#{keywords}),'%') and
             </if>
             <if test="userId !=null">
                 article.article_user_id=#{userId} and
             </if>
-            <if test="categoryId !=null">
-                article.article_id in (
-                SELECT
-                article_category_ref.article_id
-                from article_category_ref
-                where article_category_ref.category_id =#{categoryId}
-                ) AND
-            </if>
+            <!--            <if test="categoryId !=null">-->
+            <!--                article.article_id in (-->
+            <!--                SELECT-->
+            <!--                article_category_ref.article_id-->
+            <!--                from article_category_ref-->
+            <!--                where article_category_ref.category_id =#{categoryId}-->
+            <!--                ) AND-->
+            <!--            </if>-->
             <if test="tagId !=null">
                 article.article_id in (
                 select article_tag_ref.article_id from article_tag_ref
-                where article_category_ref.category_id =#{categoryId}
+                where tag_id =#{tagId}
                 ) and
             </if>
             1=1
         </where>
-        order by article.article_order desc ,article.articel_id desc;
+        order by article.article_id desc
     </select>
     <!--    查询展示并按Id降序-->
     <select id="listAllNotWithContent" resultMap="BaseResultMap">
@@ -113,12 +118,22 @@
         select sum(article_view_count) from article;
     </select>
     <!--    获得文章的总数(按一定顺序)-->
-    <select id="listArticle" resultMap="BaseResultMap">
-        select * from article where article_status=1 order by article_status asc,article_order desc,article_id asc
+    <select id="userListArticle" resultMap="BaseResultMap">
+        select * from article  where article_status=1 order by article_status asc,article_order desc,article_id asc
     </select>
-    <!--    根据Id查询文章-->
+    <!--    获得文章的总数(按一定顺序)-->
+    <select id="listArticle" resultMap="BaseResultMap">
+        select * from article  order by article_status asc,article_order desc,article_id asc
+    </select>
+
+
+    <!--    根据Id和文章状态查询文章-->
     <select id="getArticleByStatusAndId" resultMap="BaseResultMap">
         select * from article where article_id=#{id} and article_status=#{status};
+    </select>
+    <!--    根据Id查询文章-->
+    <select id="getArticleById" resultMap="BaseResultMap">
+        select * from article where article_id=#{id};
     </select>
     <!--    获得最火的文章-->
     <select id="listArticleByViewCountAndComment" resultMap="BaseResultMap">
@@ -196,11 +211,11 @@
         article_create_time,
         article_update_time, article_is_comment, article_status, article_order
         FROM
-        article
+        article  where article_status=1
         ORDER BY article_id DESC
         LIMIT #{value}
     </select>
-<!--    批量删除通过文章Id-->
+    <!--    批量删除通过文章Id-->
     <delete id="deleteBatch" parameterType="list">
         delete from article
         <if test="ids !=null">
@@ -209,5 +224,9 @@
                 #{itm}
             </foreach>
         </if>
+    </delete>
+<!--        删除通过文章Id-->
+    <delete id="deleteArticleById" parameterType="int">
+        delete from article where article_id =#{articleId};
     </delete>
 </mapper>

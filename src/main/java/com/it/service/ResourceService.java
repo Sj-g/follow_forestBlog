@@ -11,11 +11,11 @@ public interface ResourceService {
      * 禁用资源并记录操作
      * @param id 资源Id
      */
-    int disable(Integer id);
+    void disable(Integer id);
     /**
      * 启用资源并记录操作
      */
-    int enable(Integer id);
+    void enable(Integer id);
 
     /**
      * 获得一级菜单

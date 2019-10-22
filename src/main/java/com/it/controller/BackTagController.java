@@ -1,13 +1,11 @@
 package com.it.controller;
 
-import com.it.dto.ResponseVo;
+import com.it.dto.Mes;
 import com.it.entity.Tag;
 import com.it.service.TagService;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -34,7 +32,7 @@ public class BackTagController {
     public ModelAndView getTagList(ModelAndView modelAndView) {
         List<Tag> tagList = tagService.tagList();
         modelAndView.addObject("tagList", tagList);
-        modelAndView.setViewName("");
+        modelAndView.setViewName("admin/tag");
         return modelAndView;
     }
 
@@ -44,11 +42,12 @@ public class BackTagController {
      * @param tagId 文章Id
      * @return 结果
      */
-    @RequestMapping(value = "/deleteTag", method = RequestMethod.DELETE)
-    public ResponseVo deleteTag(Integer tagId) {
+    @RequestMapping(value = "/deleteTag/{tagId}")
+    @ResponseBody
+    public Mes deleteTag(@PathVariable Integer tagId) {
         tagService.deleteTag(tagId);
 
-        return ResponseVo.success();
+        return Mes.success();
     }
 
     /**
@@ -57,11 +56,11 @@ public class BackTagController {
      * @param tag 标签
      * @return 结果
      */
-    @RequestMapping(value = "/modTag", method = RequestMethod.PUT)
-    public ResponseVo modTag(Tag tag) {
+    @RequestMapping(value = "/modTag")
+    @ResponseBody
+    public Mes modTag(@RequestBody Tag tag) {
         tagService.modTag(tag);
-
-        return ResponseVo.success();
+        return Mes.success();
     }
 
     /**
@@ -71,10 +70,10 @@ public class BackTagController {
      * @return 结果
      */
     @RequestMapping("/addTag")
-    public ResponseVo addTag(Tag tag) {
+    @ResponseBody
+    public Mes addTag(Tag tag) {
         tagService.addTag(tag);
-
-        return ResponseVo.success();
+        return Mes.success();
     }
 
     /**
@@ -102,4 +101,7 @@ public class BackTagController {
         modelAndView.setViewName("");
         return modelAndView;
     }
+    /**
+     * 按照标签查找
+     */
 }

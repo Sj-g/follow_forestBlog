@@ -24,6 +24,7 @@
     <!-- 一个配置解决映射器和适配器的配置注解配置 -->
     <mvc:annotation-driven/>
 
+
     <!-- 配置视图解析器
         进行jsp解析，默认使用jstl标签，classpath下得有jstl的包
     -->
@@ -43,29 +44,17 @@
 
 
     <!-- 静态资源映射 -->
-    <!--        <mvc:resources mapping="/css/**" location="resource/assets/css/"/>-->
-    <!--        <mvc:resources mapping="/js/**" location="resource/assets/js/"/>-->
-    <!--        <mvc:resources mapping="/logo/**" location="resource/assets/logo/"/>-->
-    <!--        <mvc:resources mapping="/cs/**" location="resource/assetsadmin/css/"/>-->
-    <!--        <mvc:resources mapping="/js/**" location="resource/assetsadmin/js/"/>-->
-    <!--        <mvc:resources mapping="/fonts/**" location="resource/assetsadmin/fonts/"/>-->
-    <!--        <mvc:resources mapping="/images/**" location="resource/assetsadmin/images/"/>-->
+    <!--    <mvc:resources mapping="/static/**" location="WEB-INF/static"/>-->
     <mvc:default-servlet-handler/>
 
     <!--    拦截器-->
-    <!--    <mvc:interceptors>-->
-    <!--        <mvc:interceptor>-->
-    <!--            <mvc:mapping path="/**"/>-->
-    <!--            <bean class="com.liuyanzhao.ssm.blog.interceptor.HomeResourceInterceptor"/>-->
-    <!--        </mvc:interceptor>-->
-    <!--        <mvc:interceptor>-->
-    <!--            <mvc:mapping path="/admin"/>-->
-    <!--            <bean class="com.liuyanzhao.ssm.blog.interceptor.SecurityInterceptor"/>-->
-    <!--        </mvc:interceptor>-->
-    <!--        <mvc:interceptor>-->
-    <!--            <mvc:mapping path="/admin/**"/>-->
-    <!--            <bean class="com.liuyanzhao.ssm.blog.interceptor.SecurityInterceptor"/>-->
-    <!--        </mvc:interceptor>-->
-
-    <!--    </mvc:interceptors>-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/login"/>
+            <mvc:exclude-mapping path="/verification"/>
+            <mvc:exclude-mapping path="/user/**"/>
+            <bean class="com.it.interceptor.HomeResourceInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>

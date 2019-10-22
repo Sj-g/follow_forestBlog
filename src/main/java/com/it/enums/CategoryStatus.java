@@ -3,9 +3,9 @@ package com.it.enums;
 import lombok.Getter;
 import lombok.Setter;
 
-public enum CategoryStair {
-    Stair(0, "一级菜单"),
-    Second(1, "二级菜单");
+public enum CategoryStatus {
+    Stair(0, "一级分类"),
+    Second(1, "二级分类");
     @Getter
     @Setter
     private int code;
@@ -13,7 +13,7 @@ public enum CategoryStair {
     @Setter
     private String message;
 
-    CategoryStair(int code, String message) {
+    CategoryStatus(int code, String message) {
         this.code = code;
         this.message = message;
     }

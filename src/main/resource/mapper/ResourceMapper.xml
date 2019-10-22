@@ -11,9 +11,13 @@
         where resource_id=#{resourceId}
     </update>
     <select id="findResourceById" parameterType="int" resultType="com.it.entity.Resource">
-        select * from resource where resource_id=#{resourceId} and resource_status=1
+        select * from resource where resource_id=#{resourceId}
     </select>
     <select id="findResourceByOrder" parameterType="int" resultType="com.it.entity.Resource">
-        select * from resource where resource_order=#{order} and resource_status=1
+        select * from resource where resource_order=#{order} and resource_id !=1
+    </select>
+<!--    由于不同的需求这里需要获得id为1的数据-->
+    <select id="findResourceByOrder2" parameterType="int" resultType="com.it.entity.Resource">
+        select * from resource where resource_order=#{order}
     </select>
 </mapper>

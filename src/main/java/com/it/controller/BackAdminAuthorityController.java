@@ -1,18 +1,19 @@
 package com.it.controller;
 
-import com.it.dto.ResponseVo;
+import com.it.dto.JsonResult;
+import com.it.dto.Mes;
 import com.it.entity.Admin;
 import com.it.entity.Resource;
 import com.it.service.AdminService;
 import com.it.service.AuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import java.util.Map;
 public class BackAdminAuthorityController {
     private final AdminService adminService;
     private final AuthorityService authorityService;
+
     @Autowired
     public BackAdminAuthorityController(AdminService adminService, AuthorityService authorityService) {
         this.adminService = adminService;
@@ -46,7 +48,7 @@ public class BackAdminAuthorityController {
         //获取比此管理员权限等级低的管理员
         List<Admin> adminList = adminService.getAdminList(admin);
         modelAndView.addObject("adminList", adminList);
-        modelAndView.setViewName("");
+        modelAndView.setViewName("admin/authority");
         return modelAndView;
     }
 
@@ -57,35 +59,49 @@ public class BackAdminAuthorityController {
      * @param modelAndView 返回视图和ID
      */
     @RequestMapping("/enAuthority")
-    public ModelAndView getEnAuthority(@NotNull Integer adminId, ModelAndView modelAndView) {
+    @ResponseBody
+    public Mes getEnAuthority(Integer adminId, ModelAndView modelAndView) {
         //获取管理员已有权限和未获得权限
-        List<Map<String, List<Resource>>> mapList = authorityService.getEnAuthority(adminId);
-        //获得的权限
-        modelAndView.addObject("haveRight", mapList.get(0));
-        //没有的权限
-        modelAndView.addObject("noRight", mapList.get(1));
-        modelAndView.setViewName("");
-        return modelAndView;
+        List<List<Resource>> mapList = authorityService.getEnAuthority(adminId);
+        //获得的权限和没有的权限
+//        modelAndView.addObject("haveRight", mapList.get(0));
+//        modelAndView.addObject("noRight", mapList.get(1));
+//        modelAndView.setViewName("");
+        return Mes.success().add("haveRight", mapList.get(0)).add("noRight", mapList.get(1));
     }
 
     /**
      * 禁用权限
      */
-    @RequestMapping("/unAbleAuthority")
+    @RequestMapping("/unAbleAuthority/{resourceId}/{adminId}")
     @ResponseBody
-    public ResponseVo unAbleAuthority(@NotNull Integer resourceId, @NotNull Integer adminId) {
+    public JsonResult unAbleAuthority(@PathVariable Integer resourceId, @PathVariable Integer adminId) {
+        JsonResult jsonResult = new JsonResult();
+        if (resourceId == null) {
+            return jsonResult.fail("权限无法得到");
+        }
+        if (adminId == null) {
+            return jsonResult.fail("管理员无法得到");
+        }
         authorityService.unAble(resourceId, adminId);
-        return ResponseVo.success();
+        return jsonResult.success();
     }
 
     /**
      * 启用权限
      */
-    @RequestMapping("/enAbleAuthority")
+    @RequestMapping("/enAbleAuthority/{resourceId}/{adminId}")
     @ResponseBody
-    public ResponseVo enAbleAuthority(@NotNull Integer resourceId, @NotNull Integer adminId, HttpServletRequest request) {
+    public JsonResult enAbleAuthority(@PathVariable Integer resourceId, @PathVariable Integer adminId, HttpServletRequest request) {
+        JsonResult jsonResult = new JsonResult();
+        if (resourceId == null) {
+            return jsonResult.fail("权限无法得到");
+        }
+        if (adminId == null) {
+            return jsonResult.fail("管理员无法得到");
+        }
         authorityService.enAble(resourceId, adminId, request);
-        return ResponseVo.success();
+        return jsonResult.success();
     }
 
 }

@@ -65,7 +65,6 @@
         <include refid="Base_Column_List"/>
         FROM
         <include refid="tb"/>
-        where user_status=1
     </select>
 
     <!--根据Email查用户-->

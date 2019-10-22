@@ -5,7 +5,7 @@ import lombok.Setter;
 
 public enum ResourceStatus {
     ENABLE(1, "可用"),
-    UNABLE(2, "禁用");
+    UNABLE(0, "禁用");
     @Getter
     @Setter
     private int code;

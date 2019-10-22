@@ -1,10 +1,10 @@
 package com.it.service;
 
 import com.github.pagehelper.PageInfo;
+import com.it.dto.ArticleParam;
+import com.it.dto.SimArticle;
 import com.it.entity.Admin;
 import com.it.entity.Article;
-import com.it.entity.Category;
-import com.it.entity.Tag;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +17,7 @@ public interface ArticleService {
     /**
      * 逻辑删除
      */
-    public int deleteArticle(Integer id);
+    public void banArticleById(Integer id);
 
     /**
      * 通过Id获取文章
@@ -30,27 +30,27 @@ public interface ArticleService {
      * 更新文章
      * @param article 文章
      */
-    Integer updateArticle(Article article);
+    void updateArticle(ArticleParam article);
 
     /**
      * 添加文章
      * @param article 文章
      * @param admin 管理员Id
      */
-    Integer addArticle(Article article, Admin admin, List<Category> categoryList,List<Tag> tagList);
+    void addArticle(ArticleParam article, Admin admin);
 
     /**
      * 获得最新的5篇文章
      * @return 文章
      */
-    List<Article> getNewestArticle();
+    List<SimArticle> getNewestArticle();
 
     /**
      * 最受欢迎的文章
      * 根据评论人数和观看人数和喜欢人数确定
      * @return 文章
      */
-    List<Article> getMostPopularArticle();
+    List<SimArticle> getMostPopularArticle();
 
     /**
      * 获得文章 评论 分类 标签
@@ -76,5 +76,17 @@ public interface ArticleService {
      * @param message 信息
      * @return 文章
      */
-    List<Article> search(Map<String,Object> message);
+    PageInfo search(Map<String,Object> message,Integer page);
+
+    /**
+     * 删除文章
+     * @param articleId 文章Id
+     */
+    void deleteArticleById(Integer articleId);
+
+    /**
+     * 启用文章
+     * @param id 文章Id
+     */
+    void starArticleById(Integer id);
 }

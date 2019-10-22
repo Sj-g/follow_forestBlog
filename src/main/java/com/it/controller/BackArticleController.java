@@ -1,17 +1,17 @@
 package com.it.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.it.dto.ResponseVo;
+import com.it.dto.ArticleParam;
+import com.it.dto.JsonResult;
+import com.it.dto.Mes;
 import com.it.entity.*;
-import com.it.service.ArticleService;
-import com.it.service.CommentService;
+import com.it.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -23,24 +23,50 @@ import java.util.List;
 public class BackArticleController {
     private final ArticleService articleService;
     private final CommentService commentService;
+    private final TagService tagService;
+//    private final CategoryService categoryService;
 
     @Autowired
-    public BackArticleController(ArticleService articleService, CommentService commentService) {
+    public BackArticleController(ArticleService articleService, CommentService commentService, TagService tagService) {
         this.articleService = articleService;
         this.commentService = commentService;
+        this.tagService = tagService;
+//        this.categoryService = categoryService;
     }
 
     /**
-     * 删除文章
+     * 禁用文章
      *
-     * @param id      文章Id
-     * @param request 请求
-     * @return
+     * @param id 文章Id
      */
-    @RequestMapping(value = "/deleteArticle/{id}", method = RequestMethod.DELETE)
-    public String deleteArticle(@PathVariable(value = "id") @NotNull Integer id, HttpServletRequest request) {
-        Integer integer = articleService.deleteArticle(id);
-        return "redirect:/homepage/1";
+    @RequestMapping(value = "/banArticleById/{id}")
+    @ResponseBody
+    public Mes banArticleById(@PathVariable(value = "id") Integer id) {
+        articleService.banArticleById(id);
+        return Mes.success();
+    }
+    /**
+     * 启用文章
+     *
+     * @param id 文章Id
+     */
+    @RequestMapping(value = "/starArticleById/{id}")
+    @ResponseBody
+    public Mes starArticleById(@PathVariable(value = "id") Integer id) {
+        articleService.starArticleById(id);
+        return Mes.success();
+    }
+
+    /**
+     * 禁用文章
+     *
+     * @param id 文章Id
+     */
+    @RequestMapping(value = "/deleteArticleById/{id}")
+    @ResponseBody
+    public Mes deleteArticleById(@PathVariable(value = "id") Integer id) {
+        articleService.deleteArticleById(id);
+        return Mes.success();
     }
 
     /**
@@ -55,8 +81,7 @@ public class BackArticleController {
         //获得文章
         PageInfo<Article> pageInfo = articleService.getArticleList(page);
         modelAndView.addObject("pageInfo", pageInfo);
-
-        modelAndView.setViewName("");
+        modelAndView.setViewName("admin/article");
         return modelAndView;
     }
 
@@ -67,14 +92,17 @@ public class BackArticleController {
      * @param modelAndView 文章和评论
      * @return 文章和评论
      */
-    @RequestMapping(value = "/getArticleById", method = RequestMethod.GET)
-    public ModelAndView getArticleById(Integer articleId, ModelAndView modelAndView) {
+    @RequestMapping(value = "/getArticleById/{articleId}", method = RequestMethod.GET)
+    public ModelAndView getArticleById(@PathVariable Integer articleId, ModelAndView modelAndView) {
         Article article = articleService.getArticleById(articleId);
         modelAndView.addObject("article", article);
+        //标签列表
+        List<Tag> tagList=tagService.tagList();
+        modelAndView.addObject("tagList",tagList);
         //获得文章的评论
-        List<Comment> commentList = commentService.getCommentByArticleId(articleId);
-        modelAndView.addObject("commentList", commentList);
-        modelAndView.setViewName("");
+//        List<Comment> commentList = commentService.getCommentByArticleId(articleId);
+//        modelAndView.addObject("commentList", commentList);
+        modelAndView.setViewName("admin/modArticle");
         return modelAndView;
     }
 
@@ -84,10 +112,11 @@ public class BackArticleController {
      * @param article 文章
      * @return 修改结果
      */
-    @RequestMapping(value = "/updateArticle", method = RequestMethod.PUT)
-    public ResponseVo updateArticle(Article article) {
+    @RequestMapping(value = "/updateArticle",method = RequestMethod.POST)
+    @ResponseBody
+    public Mes updateArticle(ArticleParam article) {
         articleService.updateArticle(article);
-        return ResponseVo.success();
+        return Mes.success();
     }
 
     /**
@@ -95,13 +124,38 @@ public class BackArticleController {
      * 传入参数 文章题目 文章简洁 文章内容
      * 文章分类和标签
      *
-     * @param article 文章
-     * @return 操作结果
+     * @param articleParam 文章参数
+     * @return 全部文章页面
      */
     @RequestMapping("/addArticle")
-    public ResponseVo addArticle(Article article, HttpServletRequest request, List<Category> categoryList, List<Tag> tagList) {
+    @ResponseBody
+    public JsonResult addArticle(ArticleParam articleParam, HttpServletRequest request) {
+        JsonResult jsonResult = new JsonResult();
+        System.out.println("getArticleTagIds=" + articleParam.getArticleTagIds());
         Admin admin = (Admin) request.getSession().getAttribute("admin");
-        articleService.addArticle(article, admin, categoryList, tagList);
-        return ResponseVo.success();
+        if (admin == null) {
+            //这段代码是以后无用的，但是现在由于没有拦截器，所以要配上
+            return jsonResult.fail("管理员未登陆");
+        }
+        if (articleParam.getArticleContent() == null) {
+            return jsonResult.fail("文章为空");
+        }
+        if (articleParam.getArticleStatus() == null) {
+            //当未设置状态的时候，默认为草稿
+            articleParam.setArticleStatus(0);
+        }
+        articleService.addArticle(articleParam, admin);
+
+        return jsonResult.success();
+    }
+
+    @RequestMapping("/editorArticle")
+    public ModelAndView editorArticle(ModelAndView modelAndView) {
+        List<Tag> tagList = tagService.tagList();
+        modelAndView.addObject(tagList);
+//        Map<Category, List<Category>> mapCategory = categoryService.MapCategory();
+//        modelAndView.addObject("mapCategory", mapCategory);
+        modelAndView.setViewName("admin/editorarticle");
+        return modelAndView;
     }
 }

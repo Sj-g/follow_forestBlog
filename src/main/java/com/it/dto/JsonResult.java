@@ -11,7 +11,7 @@ public class JsonResult<T> {
      */
     private int code;
     /**
-     * 错误信息
+     * 信息
      */
     private String message;
     /**

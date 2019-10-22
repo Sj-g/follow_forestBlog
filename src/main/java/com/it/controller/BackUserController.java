@@ -1,6 +1,6 @@
 package com.it.controller;
 
-import com.it.dto.ResponseVo;
+import com.it.dto.Mes;
 import com.it.entity.User;
 import com.it.service.UserService;
 import com.it.utils.MyUtils;
@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -38,7 +39,7 @@ public class BackUserController {
     public ModelAndView getUserList(ModelAndView modelAndView) {
         List<User> userList = userService.findAll();
         modelAndView.addObject("userList", userList);
-        modelAndView.setViewName("");
+        modelAndView.setViewName("admin/user");
         return modelAndView;
     }
 
@@ -48,10 +49,10 @@ public class BackUserController {
      * @param userId 用户ID
      * @return 操作结果
      */
-    @RequestMapping("/enUser")
-    public ResponseVo enUser(@NotNull Integer userId) {
+    @RequestMapping("/enUser/{userId}")
+    public String enUser(@PathVariable("userId") Integer userId) {
         userService.enUser(userId);
-        return ResponseVo.success();
+        return "redirect:/userList";
     }
 
     /**
@@ -60,11 +61,10 @@ public class BackUserController {
      * @param userId 用户ID
      * @return 操作结果
      */
-    @RequestMapping("/unUser")
-    public ResponseVo unUser(@NotNull Integer userId) {
+    @RequestMapping("/unUser/{userId}")
+    public String unUser(@PathVariable("userId") Integer userId) {
         userService.unUser(userId);
-
-        return ResponseVo.success();
+        return "redirect:/userList";
     }
 
     /**
@@ -74,9 +74,9 @@ public class BackUserController {
      * @return 操作结果
      */
     @RequestMapping("/modUser")
-    public ResponseVo modUser(@RequestBody @Valid User user) {
+    public Mes modUser(@RequestBody @Valid User user) {
         userService.updateUser(user);
-        return ResponseVo.success();
+        return Mes.success();
     }
 
     /**
@@ -88,19 +88,18 @@ public class BackUserController {
      * @return 操作结果
      */
     @RequestMapping("/addUser")
-    public ResponseVo addUser(@RequestBody @Valid User user, BindingResult bindingResult, HttpServletRequest request) {
+    public Mes addUser(@RequestBody @Valid User user, BindingResult bindingResult, HttpServletRequest request) {
         Map<String, String> map = new HashMap<>();
         if (bindingResult.hasErrors()) {
-            for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                System.out.println("错误字段:" + fieldError.getField());
-                System.out.println("错误信息:" + fieldError.getDefaultMessage());
-                map.put(fieldError.getField(), fieldError.getDefaultMessage());
-            }
-            return ResponseVo.fail().add(map);
+            FieldError fieldError = bindingResult.getFieldError();
+            System.out.println("错误字段:" + fieldError.getField());
+            System.out.println("错误信息:" + fieldError.getDefaultMessage());
+            map.put(fieldError.getField(), fieldError.getDefaultMessage());
+            return Mes.fail().add("errormessage", map);
         }
         user.setUserLastLoginIp(MyUtils.getIpAddr(request));
         userService.addUser(user);
-        return ResponseVo.success();
+        return Mes.success();
     }
 
     /**

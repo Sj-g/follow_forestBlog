@@ -15,7 +15,7 @@ public interface AuthorityService {
     /**
      * 获得已获得权限并放入一级菜单
      */
-    public List<Map<String,List<Resource>>> getEnAuthority(Integer adminId);
+    public List<List<Resource>> getEnAuthority(Integer adminId);
 
     /**
      * 禁用权限
@@ -23,7 +23,7 @@ public interface AuthorityService {
      * @param adminId 管理员Id
      * @return
      */
-    Integer unAble(Integer resourceId, Integer adminId);
+    void unAble(Integer resourceId, Integer adminId);
 
     /**
      * 启用权限
@@ -32,5 +32,5 @@ public interface AuthorityService {
      * @return
      */
 
-    Integer enAble(Integer resourceId, Integer adminId, HttpServletRequest request);
+    void enAble(Integer resourceId, Integer adminId, HttpServletRequest request);
 }

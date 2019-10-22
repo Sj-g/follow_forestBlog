@@ -15,8 +15,12 @@ public interface ResourceMapper {
     public Resource findResourceById(Integer id);
     /**
      * 条件查询菜单
+     *
      */
     public List<Resource> findResourceByOrder(Integer order);
 
-
+    /**
+     * 查询菜单无条件
+     */
+    public List<Resource> findResourceByOrder2(Integer order);
 }

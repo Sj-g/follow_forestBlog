@@ -8,7 +8,7 @@
 
   <sql id="tb">article_tag_ref</sql>
 
-  <insert id="insert" parameterType="java.lang.Integer" >
+  <insert id="insert" parameterType="com.it.entity.ArticleTagRef" >
     insert into <include refid="tb"/>
     (article_id, tag_id)
     values (#{articleId}, #{tagId})

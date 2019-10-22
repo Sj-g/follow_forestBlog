@@ -21,13 +21,13 @@ public interface ArticleMapper {
      * @param articleId
      * @return
      */
-    public int deleteArticleById(Integer articleId);
+    public int banArticleById(Integer articleId);
 
     /**
      * 更新文章
      *
-     * @param article
-     * @return
+     * @param article 文章
+     * @return 影响行数
      */
     public int updateArticle(Article article);
 
@@ -70,8 +70,8 @@ public interface ArticleMapper {
 
     /**
      * 根据Id查询文章
-     * @param status
-     * @return
+     * @param status 文章状态
+     * @return 符合条件的文章
      */
     public Article getArticleByStatusAndId(@Param("status") Integer status,@Param("id") Integer id);
 
@@ -141,4 +141,25 @@ public interface ArticleMapper {
      */
     Integer deleteBatch(@Param("ids") List<Integer> ids);
 
+    /**
+     * 批量删除文章
+     *
+     * @param  articleId 文章Id
+     * @return 影响行数
+     */
+    Integer deleteArticleById(@Param("articleId") Integer articleId);
+
+    /**
+     * 启用文章
+     * @param articleId 文章Id
+     */
+    void starArticleById(Integer articleId);
+    /**
+     * 获取用户文章列表
+     */
+    List<Article> userListArticle();
+    /**
+     * 通过文章Id
+     */
+    public Article getArticleById(@Param("id") Integer id);
 }

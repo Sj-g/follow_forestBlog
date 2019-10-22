@@ -29,20 +29,19 @@ public class IResourceService implements ResourceService {
     }
 
     @Override
-    public int disable(Integer id) {
+    public void disable(Integer id) {
         Resource resource = resourceMapper.findResourceById(id);
         //设置禁用
         resource.setResourceStatus(ResourceStatus.UNABLE.getCode());
-        int result = resourceMapper.disableAndEnable(resource);
-        return result;
+        resourceMapper.disableAndEnable(resource);
+
     }
 
     @Override
-    public int enable(Integer id) {
+    public void enable(Integer id) {
         Resource resource = resourceMapper.findResourceById(id);
-        //设置可用
         resource.setResourceStatus(ResourceStatus.ENABLE.getCode());
-        return resourceMapper.disableAndEnable(resource);
+        resourceMapper.disableAndEnable(resource);
     }
 
     @Override
@@ -58,7 +57,9 @@ public class IResourceService implements ResourceService {
     @Override
     public Map<String, List<Resource>> geListResource() {
         Map<String, List<Resource>> map = new HashMap<>();
-        List<Resource> resourceList = resourceMapper.findResourceByOrder(0);
+        //寻找一级菜单，然后把二级菜单放到一级菜单内，通过一级菜单的id
+        Integer menus = 0;
+        List<Resource> resourceList = resourceMapper.findResourceByOrder(menus);
         for (Resource resource : resourceList) {
             List<Resource> resourceList1 = resourceMapper.findResourceByOrder(resource.getResourceId());
             map.put(resource.getResourceName(), resourceList1);

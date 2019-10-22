@@ -1,7 +1,5 @@
 package com.it.controller;
 
-import com.it.dto.JsonResult;
-import com.it.dto.ResponseVo;
 import com.it.entity.User;
 import com.it.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +7,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,11 +33,11 @@ public class UploadFileController {
      * 文件上传
      *
      * @param multipartFile 上传文件
-     * 待测试
+     *                      待测试
      */
     @RequestMapping("/upload")
     @ResponseBody
-    public void uploadFile(MultipartFile multipartFile, HttpServletRequest request, Integer userId) {
+    public void uploadFile(@RequestParam(value = "editormd-image-file") MultipartFile multipartFile, HttpServletRequest request, Integer userId) {
         //创建文件名
         String name = UUID.randomUUID().toString().replace("-", "");
         //获取后缀名
