@@ -4,8 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 
 public class MyUtils {
     /**
-     * 获得IP地址
-     * @param request
+     *
+     * @param request 获得IP地址
      * @return
      */
     public static String getIpAddr(HttpServletRequest request) {

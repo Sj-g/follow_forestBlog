@@ -1,10 +1,16 @@
 package com.it.controller;
 
+import cn.hutool.json.JSONObject;
 import com.it.entity.User;
 import com.it.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,7 +43,7 @@ public class UploadFileController {
      */
     @RequestMapping("/upload")
     @ResponseBody
-    public void uploadFile(@RequestParam(value = "editormd-image-file") MultipartFile multipartFile, HttpServletRequest request, Integer userId) {
+    public JSONObject  uploadFile(@RequestParam(value = "editormd-image-file") MultipartFile multipartFile, HttpServletRequest request, Integer userId) {
         //创建文件名
         String name = UUID.randomUUID().toString().replace("-", "");
         //获取后缀名
@@ -61,5 +67,27 @@ public class UploadFileController {
         User user = userMapper.getUserById(userId);
         user.setUserImg(path);
         userMapper.update(user);
+        JSONObject res = new JSONObject();
+        res.put("url",path);
+        res.put("success", 1);
+        res.put("message", "upload success!");
+        return res;
     }
+    /**
+     * 下载软件
+     */
+    @RequestMapping("/download")
+    public ResponseEntity<byte[]> fileDownload(HttpServletRequest request) throws IOException {
+        //指定要下载的文件所在目录
+        String url = request.getSession().getServletContext().getRealPath("/upload/");
+        File file=new File(url);
+        HttpHeaders httpHeaders=new HttpHeaders();
+        //浏览器以下载的方式打开文件
+        httpHeaders.setContentDispositionFormData("attachment",url);
+        //定义以流的形式返回文件数据
+        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        //使用SpringMvc框架ResponseEntity对象封装返回数据
+        return new ResponseEntity<byte[]>(FileUtils.readFileToByteArray(file),httpHeaders, HttpStatus.OK);
+    }
+
 }

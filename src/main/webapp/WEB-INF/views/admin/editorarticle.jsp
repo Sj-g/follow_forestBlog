@@ -19,7 +19,13 @@
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/static/vendor/font-awesome/css/fontawesome-all.min.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/styles.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/editormd/css/editormd.css"/>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/editormd/css/editormd.min.css"/>
+    <script src="${pageContext.request.contextPath}/static/vendor/JQuery/jquery-3.4.1.min.js"></script>
+    <script src="${pageContext.request.contextPath}/static/vendor/popper.js/popper.min.js"></script>
+    <script src="${pageContext.request.contextPath}/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="${pageContext.request.contextPath}/static/vendor/chart.js/chart.min.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/carbon.js"></script>
+    <script src="${pageContext.request.contextPath}/static/editormd/editormd.js"></script>
 </head>
 
 <body class="sidebar-fixed header-fixed">
@@ -38,7 +44,7 @@
         </ol>
         <div class="container-fluid">
             <form id="articleForm">
-<%--                                <input type="hidden" name="articleId" value="articleId">--%>
+                <%--                                <input type="hidden" name="articleId" value="articleId">--%>
                 <div class="form-group">
                     <label>标题(请输入文章题目) <span style="color: #FF5722; ">*</span>
                         <input type="text" name="articleTitle" id="title" class="form-control">
@@ -73,21 +79,16 @@
                     </label>
                 </div>
                 <div class="form-group">
-                    <input type="button" value="提交" class="btn btn-success "  id="button1"/>&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="提交" class="btn btn-success " id="button1"/>&nbsp;&nbsp;&nbsp;
                     <input type="reset" value="重置" class="btn btn-danger "/>
                 </div>
             </form>
         </div>
     </div>
 </div>
-<script src="${pageContext.request.contextPath}/static/vendor/JQuery/jquery-3.4.1.min.js"></script>
-<script src="${pageContext.request.contextPath}/static/vendor/popper.js/popper.min.js"></script>
-<script src="${pageContext.request.contextPath}/static/vendor/bootstrap/js/bootstrap.min.js"></script>
-<script src="${pageContext.request.contextPath}/static/vendor/chart.js/chart.min.js"></script>
-<script src="${pageContext.request.contextPath}/static/js/carbon.js"></script>
-<script src="${pageContext.request.contextPath}/static/editormd/editormd.js"></script>
+
 <script type="text/javascript">
-    var  articleContext;
+    var articleContext;
     $(function () {
         var editor = editormd("my-editormd", {
             width: "100%",
@@ -95,15 +96,20 @@
             path: "${pageContext.request.contextPath}/static/editormd/lib/",
             emoji: true,
             saveHTMLToTextarea: true, // 保存 HTML 到 Textarea
-            <%--tex: true,// 开启科学公式TeX语言支持，默认关闭--%>
-            <%--flowChart: true,//开启流程图支持，默认关闭--%>
-            <%--toolbarAutoFixed: true,//工具栏自动固定定位的开启与禁用--%>
-            <%--imageUpload: true,--%>
-            <%--imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],--%>
-            <%--imageUploadURL: "${pageContext.request.contextPath}/upload"--%>
+            tex: true,// 开启科学公式TeX语言支持，默认关闭
+            flowChart: true,//开启流程图支持，默认关闭
+            dialogLockScreen: false,//设置弹出层对话框不锁屏
+            toolbarAutoFixed: true,//工具栏自动固定定位的开启与禁用
+            imageUpload: true,
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL: "${pageContext.request.contextPath}/upload",
+            onload: function () {
+                console.log('onload', this);
+                // alert("上传成功");
+            },
         });
         $("#button1").click(function () {
-            var  articleContent=editor.getMarkdown();
+            var articleContent = editor.getMarkdown();
             up(articleContent);
         });
     });
@@ -124,21 +130,21 @@
     $(".icon-puzzle").parent().addClass("active");
 
     function up(articleContent) {
-            $.ajax({
-                url:"${pageContext.request.contextPath}/addArticle",
-                dateType:"json",
-                type:"post",
-                data:$("#articleForm").serialize()+"&articleContent="+articleContent,
-                success:function (result) {
-                    if (result.code==200){
-                        alert("success");
-                        location.reload();
-                    }else{
-                        alert(result.message);
-                    }
-
+        $.ajax({
+            url: "${pageContext.request.contextPath}/addArticle",
+            dateType: "json",
+            type: "post",
+            data: $("#articleForm").serialize() + "&articleContent=" + articleContent,
+            success: function (result) {
+                if (result.code == 200) {
+                    alert("success");
+                    location.reload();
+                } else {
+                    alert(result.message);
                 }
-            });
+
+            }
+        });
     }
 
 </script>
